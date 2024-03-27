@@ -1,13 +1,14 @@
 import { ConfigProvider, theme } from "antd";
 import "./App.css";
 import Mainlayout from "./layouts/MainLayout";
+import Hero from "./components/Hero";
 
 function App() {
   return (
     <>
       <ConfigProvider theme={{ algorithm: theme.defaultAlgorithm }}>
         <Mainlayout>
-          <div className="h-screen">Content</div>
+          <Hero />
           <div className="h-screen">Content</div>
         </Mainlayout>
       </ConfigProvider>

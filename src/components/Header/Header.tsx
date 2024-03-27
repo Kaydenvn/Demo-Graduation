@@ -48,7 +48,11 @@ const Header = () => {
     };
   }, []);
   return (
-    <nav className={` ${isSticky ? "sticky top-0 left-0 right-0 bord" : ""}`}>
+    <nav
+      className={` ${
+        isSticky ? "sticky top-0 left-0 right-0 border-b duration-300" : ""
+      }`}
+    >
       <div className="flex bg-primary items-center w-full text-base  p-2 sm:flex-col  sm:gap-2  md:min-h-10 lg:flex-row lg:gap-20">
         <a
           href="https://hcmut.edu.vn/"
@@ -65,6 +69,9 @@ const Header = () => {
             </span>
             <span className="text-white text-xl">Trường Đại học Bách Khoa</span>
           </div>
+          <span className="header__title__small md:hidden text-white ">
+            Khoa Kỹ Thuật Giao Thông
+          </span>
         </a>
 
         <div className="flex md:justify-between w-full sm:justify-end sm:gap-10">
@@ -106,6 +113,19 @@ const Header = () => {
             </button>
           </div>
         </div>
+      </div>
+
+      {/* nav item for mobile */}
+      <div className={`space-y-2 bg-primary`}>
+        {headerItems.map((item) => {
+          return (
+            <Link to={item.path} key={item.key} className="m-1">
+              <li className="text-white font-semibold block text-base first:font-medium">
+                {item.label}
+              </li>
+            </Link>
+          );
+        })}
       </div>
     </nav>
   );
