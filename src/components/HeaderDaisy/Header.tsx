@@ -2,7 +2,7 @@ import Logo from "src/assets/logobachkhoatoi.png";
 
 export default function Header() {
   return (
-    <div className="navbar bg-primary rounded-b">
+    <header className="navbar bg-primary sticky top-0 z-50 rounded-b">
       <div className="navbar-start">
         <div className="dropdown">
           <div
@@ -52,7 +52,9 @@ export default function Header() {
             alt="Logo"
             className="w-20 inline-block items-center"
           />
-          <div className="hidden md:block">Khoa Kỹ Thuật Giao Thông</div>
+          <div className="text-white hidden md:inline-block">
+            Khoa Kỹ Thuật Giao Thông
+          </div>
         </a>
       </div>
       <div className="navbar-center hidden lg:flex">
@@ -64,7 +66,7 @@ export default function Header() {
             <a className="text-white">Giới Thiệu</a>
           </li>
           <li>
-            <a className="text-white">Tin Tc</a>
+            <a className="text-white">Tin Tức</a>
           </li>
           <li>
             <a className="text-white">Liên Hệ</a>
@@ -74,6 +76,6 @@ export default function Header() {
       <div className="navbar-end">
         <a className="btn">Login</a>
       </div>
-    </div>
+    </header>
   );
 }

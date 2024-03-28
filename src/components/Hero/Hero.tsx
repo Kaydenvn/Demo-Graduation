@@ -1,13 +1,14 @@
 import React from "react";
+import BG from "src/assets/bg.jpeg";
 
 export default function Hero() {
   return (
-    <section>
+    <section className="px-5">
       <div className="container mx-auto mt-2">
         <div
           className="hero h-96 md:h-[500px] rounded-box overflow-hidden"
           style={{
-            backgroundImage: `url("https://raw.githubusercontent.com/Kaydenvn/graduationFE/main/public/bg.jpeg?token=GHSAT0AAAAAACOTUFM66G65PKUKGFC2SUXYZQEOADA")`,
+            backgroundImage: `url(${BG})`,
           }}
         >
           <div className="hero-overlay bg-opacity-60"></div>
