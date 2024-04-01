@@ -1,4 +1,5 @@
 import Logo from "src/assets/logo_FTE_mainpage_2.png";
+import { NavLink } from "react-router-dom";
 
 export default function Header() {
   return (
@@ -64,7 +65,9 @@ export default function Header() {
         </ul>
       </div>
       <div className="navbar-end">
-        <a className="btn">Login</a>
+        <NavLink to="/login" className="btn">
+          Đăng Nhập
+        </NavLink>
       </div>
     </header>
   );

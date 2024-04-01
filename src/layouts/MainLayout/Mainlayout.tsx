@@ -1,3 +1,4 @@
+import Bottom from "src/components/Bottom/Bottom";
 import Footer from "src/components/Footer";
 import Header from "src/components/HeaderDaisy";
 
@@ -11,6 +12,7 @@ export default function Mainlayout({
       <Header />
       <div>{children}</div>
       <Footer />
+      <Bottom />
     </div>
   );
 }
