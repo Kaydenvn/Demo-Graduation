@@ -44,9 +44,9 @@ interface CardListProps {
 
 const CardList = ({ title, description }: CardListProps) => {
   return (
-    <section className="py-6 md:py-10 px-5">
-      <div className="container  mx-auto ">
-        <div className="text-3xl font-medium mb-10 px-2">{title}</div>
+    <section className="py-6 md:py-6 px-5">
+      <div className="container mx-auto ">
+        <div className="text-2xl font-medium mb-8 px-2">{title}</div>
         <p className="text-lg text-gray-600 mb-2 px-2">{description}</p>
         <List
           grid={{

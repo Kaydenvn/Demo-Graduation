@@ -3,6 +3,7 @@ import "./App.css";
 import Mainlayout from "./layouts/MainLayout";
 import Hero from "./components/Hero";
 import CardList from "./components/List";
+import TeacherSection from "./components/TeacherSection";
 
 function App() {
   return (
@@ -18,7 +19,7 @@ function App() {
             title="Các Môn Học"
             description="Thông tin về các môn học và tài liệu tham khảo"
           />
-          <div className="h-screen">Content</div>
+          <TeacherSection />
         </Mainlayout>
       </ConfigProvider>
     </>

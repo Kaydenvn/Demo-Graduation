@@ -1,4 +1,4 @@
-import Logo from "src/assets/logobachkhoatoi.png";
+import Logo from "src/assets/logo_FTE_mainpage_2.png";
 
 export default function Header() {
   return (
@@ -43,33 +43,23 @@ export default function Header() {
             </li>
           </ul>
         </div>
-        <a
-          href="https://hcmut.edu.vn/"
-          className="btn btn-ghost text-xl text-primary items-center justify-center"
-        >
-          <img
-            src={Logo}
-            alt="Logo"
-            className="w-20 inline-block items-center"
-          />
-          <div className="text-white hidden md:inline-block">
-            Khoa Kỹ Thuật Giao Thông
-          </div>
+        <a href="https://fte.hcmut.edu.vn/" className="hover:opacity-80">
+          <img src={Logo} alt="Logo" className="w-64 absolute top-0.5 left-2" />
         </a>
       </div>
       <div className="navbar-center hidden lg:flex">
         <ul className="menu menu-horizontal px-1">
           <li>
-            <a className="text-white">Trang Chủ</a>
+            <a className="text-white hover:opacity-80">Trang Chủ</a>
           </li>
           <li>
-            <a className="text-white">Giới Thiệu</a>
+            <a className="text-white hover:opacity-80">Giới Thiệu</a>
           </li>
           <li>
-            <a className="text-white">Tin Tức</a>
+            <a className="text-white hover:opacity-80">Tin Tức</a>
           </li>
           <li>
-            <a className="text-white">Liên Hệ</a>
+            <a className="text-white hover:opacity-80">Liên Hệ</a>
           </li>
         </ul>
       </div>
