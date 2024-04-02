@@ -3,6 +3,8 @@ import { ConfigProvider, theme } from "antd";
 import "./App.css";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { Suspense } from "react";
+import Loading from "./pages/Loading";
+
 const Mainlayout = React.lazy(() => import("./layouts/MainLayout"));
 const Home = React.lazy(() => import("./pages/Home"));
 const Login = React.lazy(() => import("./pages/Login"));
@@ -12,7 +14,7 @@ const router = createBrowserRouter([
     path: "/",
     element: (
       <Mainlayout>
-        <Suspense>
+        <Suspense fallback={<Loading />}>
           <Home />
         </Suspense>
       </Mainlayout>
@@ -21,7 +23,7 @@ const router = createBrowserRouter([
   {
     path: "/login",
     element: (
-      <Suspense>
+      <Suspense fallback={<Loading />}>
         <Login />
       </Suspense>
     ),
