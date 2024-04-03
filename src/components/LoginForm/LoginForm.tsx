@@ -1,6 +1,11 @@
+import { useMutation } from "@tanstack/react-query";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
+import { login } from "src/api/Login/Login.api";
 import Logo from "src/assets/bk-logo.png";
+import { showNotification } from "../Notification/Notification";
+import { useNavigate } from "react-router-dom";
 
 type FormDataType = {
   email: string;
@@ -11,10 +16,28 @@ export default function LoginForm() {
   const form = useForm<FormDataType>();
   const { register, handleSubmit, formState } = form;
   const { errors } = formState;
+  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
 
   const onSubmit = (data: FormDataType) => {
-    console.log(data);
+    const result = loginMutation.mutateAsync(data);
+    console.log(result);
   };
+
+  const loginMutation = useMutation({
+    mutationFn: login,
+    onMutate: () => {
+      setLoading(true);
+    },
+    onError: (error) => {
+      console.error(error);
+    },
+    onSuccess: (data) => {
+      showNotification("Đăng nhập thành công", "success");
+      console.log(data);
+      navigate("/");
+    },
+  });
 
   return (
     <div className="lg:w-2/6 md:w-1/2 bg-gray-50 rounded-lg p-8 flex flex-col md:ml-10 w-full mt-10 md:mt-0">

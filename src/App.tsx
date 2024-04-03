@@ -4,6 +4,18 @@ import "./App.css";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { Suspense } from "react";
 import Loading from "./pages/Loading";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import createStore from "react-auth-kit/createStore";
+import AuthProvider from "react-auth-kit";
+
+const store = createStore({
+  authName: "_auth",
+  authType: "cookie",
+  cookieDomain: window.location.hostname,
+  cookieSecure: window.location.protocol === "https:",
+});
+
+const queryClient = new QueryClient();
 
 const Mainlayout = React.lazy(() => import("./layouts/MainLayout"));
 const Home = React.lazy(() => import("./pages/Home"));
@@ -33,9 +45,13 @@ const router = createBrowserRouter([
 function App() {
   return (
     <>
-      <ConfigProvider theme={{ algorithm: theme.defaultAlgorithm }}>
-        <RouterProvider router={router} />
-      </ConfigProvider>
+      <AuthProvider store={store}>
+        <QueryClientProvider client={queryClient}>
+          <ConfigProvider theme={{ algorithm: theme.defaultAlgorithm }}>
+            <RouterProvider router={router} />
+          </ConfigProvider>
+        </QueryClientProvider>
+      </AuthProvider>
     </>
   );
 }
