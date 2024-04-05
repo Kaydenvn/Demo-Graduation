@@ -1,7 +1,11 @@
 import Logo from "src/assets/logo_FTE_mainpage_2.png";
-import { NavLink } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
+import useIsAuthenticated from "react-auth-kit/hooks/useIsAuthenticated";
+import Avatar from "../Avatar";
 
 export default function Header() {
+  const isAuthenticated = useIsAuthenticated();
+  console.log(isAuthenticated);
   return (
     <header className="navbar bg-primary sticky top-0 z-50 rounded-b">
       <div className="navbar-start">
@@ -31,43 +35,79 @@ export default function Header() {
             className="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52 "
           >
             <li>
-              <a>Trang Chủ</a>
+              <Link
+                to="/"
+                className="text-primary btn bg-transparent border-none hover:text-primary"
+              >
+                Trang Chủ
+              </Link>
             </li>
             <li>
-              <a>Giới Thiệu</a>
+              <Link
+                to="/introduction"
+                className="text-primary btn bg-transparent border-none hover:text-primary"
+              >
+                Giới Thiệu
+              </Link>
             </li>
             <li>
-              <a>Tin Tức</a>
+              <a className="text-primary btn bg-transparent border-none hover:text-primary">
+                Tin Tức
+              </a>
             </li>
             <li>
-              <a>Liên Hệ</a>
+              <a className="text-primary btn bg-transparent border-none hover:text-primary">
+                Liên Hệ
+              </a>
             </li>
           </ul>
         </div>
-        <a href="https://fte.hcmut.edu.vn/" className="hover:opacity-80">
-          <img src={Logo} alt="Logo" className="w-64 absolute top-0.5 left-2" />
-        </a>
+        <Link to="/" className="hover:opacity-80">
+          <img
+            src={Logo}
+            alt="Logo"
+            className="hidden md:w-[19rem] absolute top-0.5 left-2"
+          />
+        </Link>
       </div>
       <div className="navbar-center hidden lg:flex">
-        <ul className="menu menu-horizontal px-1">
+        <ul className="menu menu-horizontal px-1 gap-2">
           <li>
-            <a className="text-white hover:opacity-80">Trang Chủ</a>
+            <Link
+              to="/"
+              className="text-white btn bg-transparent border-none hover:text-primary"
+            >
+              Trang Chủ
+            </Link>
           </li>
           <li>
-            <a className="text-white hover:opacity-80">Giới Thiệu</a>
+            <Link
+              to="/introduction"
+              className="text-white btn bg-transparent border-none hover:text-primary"
+            >
+              Giới Thiệu
+            </Link>
           </li>
           <li>
-            <a className="text-white hover:opacity-80">Tin Tức</a>
+            <a className="text-white btn bg-transparent border-none hover:text-primary">
+              Tin Tức
+            </a>
           </li>
           <li>
-            <a className="text-white hover:opacity-80">Liên Hệ</a>
+            <a className="text-white btn bg-transparent border-none hover:text-primary">
+              Liên Hệ
+            </a>
           </li>
         </ul>
       </div>
       <div className="navbar-end">
-        <NavLink to="/login" className="btn">
-          Đăng Nhập
-        </NavLink>
+        {isAuthenticated == true ? (
+          <Avatar />
+        ) : (
+          <NavLink to="/login" className="btn">
+            Đăng Nhập
+          </NavLink>
+        )}
       </div>
     </header>
   );

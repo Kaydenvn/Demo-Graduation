@@ -16,6 +16,7 @@ class Http {
       (response) => {
         return response;
       },
+
       async (error: AxiosError) => {
         return Promise.reject(error);
       }

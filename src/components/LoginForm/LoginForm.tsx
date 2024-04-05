@@ -6,6 +6,7 @@ import { login } from "src/api/Login/Login.api";
 import Logo from "src/assets/bk-logo.png";
 import { showNotification } from "../Notification/Notification";
 import { useNavigate } from "react-router-dom";
+import useSignIn from "react-auth-kit/hooks/useSignIn";
 
 type FormDataType = {
   email: string;
@@ -18,10 +19,23 @@ export default function LoginForm() {
   const { errors } = formState;
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const signIn = useSignIn();
 
   const onSubmit = (data: FormDataType) => {
     const result = loginMutation.mutateAsync(data);
-    console.log(result);
+    result.then((res) => {
+      signIn({
+        auth: {
+          token: res.data.token,
+          type: "Bearer",
+        },
+        userState: {
+          name: res.data.user.name,
+          uid: res.data.user.id,
+        },
+      });
+      navigate("/");
+    });
   };
 
   const loginMutation = useMutation({
@@ -34,8 +48,6 @@ export default function LoginForm() {
     },
     onSuccess: (data) => {
       showNotification("Đăng nhập thành công", "success");
-      console.log(data);
-      navigate("/");
     },
   });
 
@@ -110,9 +122,21 @@ export default function LoginForm() {
           )}
         </div>
 
-        <button className="text-white bg-soft border-0 py-2 px-8 w-full focus:outline-none hover:opacity-80 rounded text-lg">
-          Button
-        </button>
+        {loading ? (
+          <button
+            type="submit"
+            className="text-white bg-soft border-0 py-2 px-8 w-full flex items-center justify-center focus:outline-none hover:opacity-80 rounded text-lg"
+          >
+            <div className="border-gray-300 h-6 w-6 animate-spin rounded-full border-2 border-t-blue-600" />
+          </button>
+        ) : (
+          <button
+            type="submit"
+            className="text-white bg-soft border-0 py-2 px-8 w-full focus:outline-none hover:opacity-80 rounded text-lg"
+          >
+            Đăng Nhập
+          </button>
+        )}
       </form>
     </div>
   );

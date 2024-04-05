@@ -1,32 +1,36 @@
-import Nhan from "src/assets/Nhan.png";
-import Thao from "src/assets/Thao.png";
-import Tuan from "src/assets/TUan.png";
+import Long from "src/assets/1_TranDangLong.png";
+import Thong from "src/assets/Hong_Duc_Thong.png";
+import Hung from "src/assets/Nguyen_Dinh_Hung.png";
+
 import { MailOutlined, PhoneOutlined } from "@ant-design/icons";
 
 const TeacherArray = [
   {
-    name: "TS.Trần Hữu Nhân",
-    email: "thnhan@hcmut.edu.vn",
+    name: "TS. Trần Đăng Long",
+    duty: "Chủ nhiệm Bộ môn",
+    email: "trandanglong@hcmut.edu.vn",
     description:
-      "Trưởng khoa, phụ trách về quy hoạch & định hướng phát triển, nhân sự, tài chính, cơ sở vật chất, khen thưởng",
-    phone: "+84-028-3864 7257",
-    img: Nhan,
+      "Tốt nghiệp Tiến sĩ Hệ thống năng lượng Hydro (2017) - Đại học Kyushu, Nhật  Bản",
+    phone: "+84-28 3.864 7256 (Ext. 5650)",
+    img: Long,
   },
   {
-    name: " PGS.TS.Lê Đình Tuân",
-    email: "tuan-ledinh@hcmut.edu.vn",
+    name: "TS. Hồng Đức Thông",
+    email: "hongducthong@hcmut.edu.vn",
+    duty: "Phó Chủ nhiệm Bộ môn",
     description:
-      "Phó trưởng khoa, phụ trách về Khoa học & Công nghệ, Quan hệ đối ngoại",
-    phone: "+84-028-3864 7257",
-    img: Tuan,
+      "Tốt nghiệp Tiến sĩ Kỹ thuật Cơ khí động lực (2014) - Chương trình liên kết giữa Viện Công nghệ Bandung, Indonesia và Đại học Hokkaido, Japan",
+    phone: "+84-28 3.864 7256 (Ext. 5650)",
+    img: Thong,
   },
   {
-    name: "TS.Nguyễn Song Thanh Thảo",
-    email: "nguyensongthanhthao@hcmut.edu.vn",
+    name: "ThS. Nguyễn Đình Hùng",
+    email: "nguyendinhhung@hcmut.edu.vn",
+    duty: "Chủ tịch CĐ khoa",
     description:
-      "Phó trưởng khoa, phụ trách về Đào tạo, Chương trình CLC & PFIEV, Công tác SV, ĐBCL & ISO",
-    phone: "+84-028-3864 7257",
-    img: Thao,
+      "Tốt nghiệp Thạc sĩ Ô tô - Máy động lực (2004) - Đại học Bách Khoa Tp.HCM",
+    phone: "+84-28 3.864 7256 (Ext. 5649)",
+    img: Hung,
   },
 ];
 
@@ -46,12 +50,15 @@ export default function Team() {
                 <div className="h-full flex flex-col items-center text-center">
                   <img
                     alt="team"
-                    className="flex-shrink-0 rounded-lg w-full h-56 object-contain object-center mb-4"
+                    className="flex-shrink-0 rounded-lg w-full h-56 object-contain object-center mb-4 "
                     src={teacher.img}
                   />
                   <div className="w-full">
                     <h2 className="title-font font-medium text-lg text-gray-900">
-                      {teacher.name}
+                      {teacher.name} -{" "}
+                      <span className="font-thin italic text-base">
+                        {teacher.duty}
+                      </span>
                     </h2>
                     <h3 className="text-gray-500 mb-3"></h3>
                     <p className="mb-4">{teacher.description}</p>

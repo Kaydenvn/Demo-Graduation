@@ -1,4 +1,5 @@
 import { Card, List, Typography } from "antd";
+import { Link } from "react-router-dom";
 
 const { Title } = Typography;
 
@@ -69,22 +70,24 @@ const CardList = ({ title, description }: CardListProps) => {
           dataSource={datasource}
           renderItem={(data: { key: string; url: string }) => (
             <List.Item>
-              <Card
-                bordered={false}
-                key={data.key}
-                hoverable
-                cover={
-                  <img
-                    alt={"ALT"}
-                    src={data.url}
-                    style={{ padding: 20, borderRadius: 20 }}
-                  />
-                }
-                style={{ width: 240 }}
-              >
-                <Title level={5}>{"TITLE"}</Title>
-                {"BODY"}
-              </Card>
+              <Link to="/products">
+                <Card
+                  bordered={false}
+                  key={data.key}
+                  hoverable
+                  cover={
+                    <img
+                      alt={"ALT"}
+                      src={data.url}
+                      style={{ padding: 20, borderRadius: 20 }}
+                    />
+                  }
+                  style={{ width: 240 }}
+                >
+                  <Title level={5}>{"TITLE"}</Title>
+                  {"BODY"}
+                </Card>
+              </Link>
             </List.Item>
           )}
         />
