@@ -66,7 +66,7 @@ export default function Header() {
           <img
             src={Logo}
             alt="Logo"
-            className="hidden md:w-[19rem] absolute top-0.5 left-2"
+            className="hidden md:inline-block md:w-[19rem] absolute top-0.5 left-2"
           />
         </Link>
       </div>
