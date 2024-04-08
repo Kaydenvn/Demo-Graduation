@@ -7,14 +7,11 @@ export default function Home() {
   return (
     <div>
       <Hero />
-      <CardList title="Mô Hình" description="Các mô hình trong xưởng C3" />
+      <CardList />
       <section className="">
         <div className="container divider mx-auto"></div>
       </section>
-      <ListSubject
-        title="Các Môn Học"
-        description="Thông tin về các môn học và tài liệu tham khảo"
-      />
+      <ListSubject />
       <Team />
     </div>
   );
