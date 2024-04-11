@@ -19,11 +19,13 @@ const store = createStore({
 const queryClient = new QueryClient();
 
 const Mainlayout = React.lazy(() => import("./layouts/MainLayout"));
+const DashboardLayout = React.lazy(() => import("./layouts/DashboardLayout"));
 const Home = React.lazy(() => import("./pages/Home"));
 const Login = React.lazy(() => import("./pages/Login"));
 const Products = React.lazy(() => import("./pages/Products"));
 const Subject = React.lazy(() => import("./pages/Subject"));
 const Introduction = React.lazy(() => import("./pages/Introduction"));
+const Dashboard = React.lazy(() => import("./pages/Dashboard"));
 
 const router = createBrowserRouter([
   {
@@ -75,6 +77,17 @@ const router = createBrowserRouter([
           <Introduction />
         </Suspense>
       </Mainlayout>
+    ),
+  },
+  {
+    path: "/dashboard",
+    element: (
+      <DashboardLayout>
+        <Suspense fallback={<Loading />}>
+          <ScrollToTop />
+          <Dashboard />
+        </Suspense>
+      </DashboardLayout>
     ),
   },
 ]);
