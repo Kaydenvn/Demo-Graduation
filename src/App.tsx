@@ -94,13 +94,15 @@ const router = createBrowserRouter([
 function App() {
   return (
     <>
-      <AuthProvider store={store}>
-        <QueryClientProvider client={queryClient}>
-          <ConfigProvider theme={{ algorithm: theme.defaultAlgorithm }}>
-            <RouterProvider router={router} />
-          </ConfigProvider>
-        </QueryClientProvider>
-      </AuthProvider>
+      <Suspense fallback={<Loading />}>
+        <AuthProvider store={store}>
+          <QueryClientProvider client={queryClient}>
+            <ConfigProvider theme={{ algorithm: theme.defaultAlgorithm }}>
+              <RouterProvider router={router} />
+            </ConfigProvider>
+          </QueryClientProvider>
+        </AuthProvider>
+      </Suspense>
     </>
   );
 }
