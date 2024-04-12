@@ -40,11 +40,11 @@ export default function Team() {
       <div className="container px-5 py-24 mx-auto">
         <div className="flex flex-col text-center w-full mb-10">
           <h1 className="text-2xl font-medium title-font mb-2 text-gray-900">
-            BAN CHỦ NHIỆM KHOA
+            BAN CHỦ NHIỆM BỘ MÔN
           </h1>
         </div>
         <div className="flex flex-wrap -m-4">
-          {TeacherArray.map((teacher, index) => {
+          {TeacherArray.map((teacher) => {
             return (
               <div className="p-4 lg:w-1/3">
                 <div className="h-full flex flex-col items-center text-center">

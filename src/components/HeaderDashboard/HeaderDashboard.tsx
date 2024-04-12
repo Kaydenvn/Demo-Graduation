@@ -2,10 +2,18 @@ import Logo from "src/assets/logo_FTE_mainpage_2.png";
 import { Link, NavLink } from "react-router-dom";
 import useIsAuthenticated from "react-auth-kit/hooks/useIsAuthenticated";
 import Avatar from "../Avatar";
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 export default function HeaderDashboard() {
+  const naviate = useNavigate();
   const isAuthenticated = useIsAuthenticated();
-  console.log(isAuthenticated);
+  useEffect(() => {
+    if (isAuthenticated == false) {
+      naviate("/login");
+    }
+  });
+
   return (
     <header className="navbar bg-primary sticky top-0 z-50 rounded-b">
       <div className="navbar-start">
