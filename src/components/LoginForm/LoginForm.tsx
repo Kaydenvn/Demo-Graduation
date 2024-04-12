@@ -32,6 +32,8 @@ export default function LoginForm() {
         userState: {
           name: res.data.user.name,
           uid: res.data.user.id,
+          email: res.data.user.email,
+          role: res.data.user.role,
         },
       });
       navigate("/");
@@ -46,7 +48,7 @@ export default function LoginForm() {
     onError: (error) => {
       console.error(error);
     },
-    onSuccess: (data) => {
+    onSuccess: () => {
       showNotification("Đăng nhập thành công", "success");
     },
   });

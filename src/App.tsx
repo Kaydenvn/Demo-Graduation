@@ -1,12 +1,11 @@
-import React from "react";
-import { ConfigProvider, theme } from "antd";
-import "./App.css";
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import { Suspense } from "react";
-import Loading from "./pages/Loading";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import createStore from "react-auth-kit/createStore";
+import { ConfigProvider, theme } from "antd";
+import React, { Suspense } from "react";
 import AuthProvider from "react-auth-kit";
+import createStore from "react-auth-kit/createStore";
+import { RouterProvider, createBrowserRouter } from "react-router-dom";
+import "./App.css";
+import Loading from "./pages/Loading";
 import ScrollToTop from "./utils/ScrollToTop";
 
 const store = createStore({

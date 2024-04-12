@@ -28,7 +28,10 @@ const ListSubject = () => {
       </p>
       <div className="flex flex-wrap -mx-1 lg:-mx-4">
         {datasource.map((item) => (
-          <div className="my-1 px-1 w-full md:w-1/2 lg:my-4 lg:px-4 lg:w-1/3">
+          <div
+            className="my-1 px-1 w-full md:w-1/2 lg:my-4 lg:px-4 lg:w-1/3"
+            key={item.key}
+          >
             <article className="overflow-hidden rounded-lg shadow-lg">
               <a href="#">
                 <img

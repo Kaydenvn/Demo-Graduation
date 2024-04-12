@@ -46,7 +46,7 @@ export default function Team() {
         <div className="flex flex-wrap -m-4">
           {TeacherArray.map((teacher) => {
             return (
-              <div className="p-4 lg:w-1/3">
+              <div className="p-4 lg:w-1/3" key={teacher.name}>
                 <div className="h-full flex flex-col items-center text-center">
                   <img
                     alt="team"

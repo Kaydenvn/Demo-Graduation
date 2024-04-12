@@ -5,7 +5,6 @@ import Avatar from "../Avatar";
 
 export default function Header() {
   const isAuthenticated = useIsAuthenticated();
-  console.log(isAuthenticated);
   return (
     <header className="navbar bg-primary sticky top-0 z-50 rounded-b">
       <div className="navbar-start">
