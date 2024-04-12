@@ -1,12 +1,13 @@
 import axios, { AxiosError, AxiosInstance } from "axios";
 
-const BASE_URL = import.meta.env.VITE_BASE_URL;
-
 class Http {
   instance: AxiosInstance;
   constructor() {
     this.instance = axios.create({
-      baseURL: BASE_URL,
+      baseURL:
+        import.meta.env.VITE_BASE_NODE_ENV === "production"
+          ? import.meta.env.VITE_BASE_URL
+          : import.meta.env.VITE_BASE_URL_DEV,
       timeout: 10000,
       headers: {
         "Content-Type": "application/json",

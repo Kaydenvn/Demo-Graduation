@@ -43,7 +43,7 @@ export default function HeaderDashboard() {
           <img
             src={Logo}
             alt="Logo"
-            className="hidden md:inline-block md:w-[15rem] absolute top-0.5 left-2"
+            className="hidden md:inline-block md:w-[16rem] absolute top-0.5 left-2"
           />
         </Link>
       </div>
