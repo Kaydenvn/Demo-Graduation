@@ -1,7 +1,7 @@
 import Logo from "src/assets/logo_FTE_mainpage_2.png";
 import { Link, NavLink } from "react-router-dom";
 import useIsAuthenticated from "react-auth-kit/hooks/useIsAuthenticated";
-import Avatar from "../Avatar";
+import Avatar from "../../Avatar";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -43,7 +43,7 @@ export default function HeaderDashboard() {
           <img
             src={Logo}
             alt="Logo"
-            className="hidden md:inline-block md:w-[16rem] absolute top-0.5 left-2"
+            className="hidden md:inline-block md:w-[17rem] absolute top-0.5 left-2"
           />
         </Link>
       </div>

@@ -1,4 +1,5 @@
 import { notification, Button } from "antd";
+
 export const showNotification = (content, type = "info") => {
   const capitalizedType = type.charAt(0).toUpperCase() + type.slice(1);
 
@@ -11,6 +12,10 @@ export const showNotification = (content, type = "info") => {
     }
   };
 
+  const close = (key) => {
+    notification.close(key);
+  };
+
   const btn = (
     <Button
       type="link"
@@ -21,6 +26,12 @@ export const showNotification = (content, type = "info") => {
     </Button>
   );
 
+  const closeBtn = (
+    <Button type="link" size="small" onClick={() => close(key)}>
+      Close
+    </Button>
+  );
+
   switch (type) {
     case "success":
       notification.success({
@@ -28,6 +39,7 @@ export const showNotification = (content, type = "info") => {
         description: content,
         placement: "topRight",
         btn,
+        duration: 1,
       });
       break;
     case "info":
@@ -36,6 +48,7 @@ export const showNotification = (content, type = "info") => {
         description: content,
         placement: "topRight",
         btn,
+        duration: 1,
       });
       break;
     case "warning":
@@ -44,6 +57,7 @@ export const showNotification = (content, type = "info") => {
         description: content,
         placement: "topRight",
         btn,
+        duration: 1,
       });
       break;
     case "error":
@@ -52,6 +66,7 @@ export const showNotification = (content, type = "info") => {
         description: content,
         placement: "topRight",
         btn,
+        duration: 1,
       });
       break;
     default:
@@ -60,6 +75,7 @@ export const showNotification = (content, type = "info") => {
         description: content,
         placement: "topRight",
         btn,
+        duration: 1,
       });
       break;
   }
