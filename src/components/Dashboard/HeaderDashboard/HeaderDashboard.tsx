@@ -1,16 +1,16 @@
-import Logo from "src/assets/logo_FTE_mainpage_2.png";
-import { Link, NavLink } from "react-router-dom";
-import useIsAuthenticated from "react-auth-kit/hooks/useIsAuthenticated";
-import Avatar from "../../Avatar";
 import { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
+import Logo from "src/assets/logo_FTE_mainpage_2.png";
+import useAuth from "src/hooks/useAuth";
+import Avatar from "../../Avatar";
 
 export default function HeaderDashboard() {
-  const naviate = useNavigate();
-  const isAuthenticated = useIsAuthenticated();
+  const { isAuthenticated } = useAuth();
+  const navigate = useNavigate();
+  const location = useLocation();
   useEffect(() => {
     if (isAuthenticated == false) {
-      naviate("/login");
+      navigate("/login", { state: { from: location } });
     }
   });
 

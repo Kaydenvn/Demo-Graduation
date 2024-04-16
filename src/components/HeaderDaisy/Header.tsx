@@ -1,10 +1,11 @@
-import Logo from "src/assets/logo_FTE_mainpage_2.png";
 import { Link, NavLink } from "react-router-dom";
-import useIsAuthenticated from "react-auth-kit/hooks/useIsAuthenticated";
+import Logo from "src/assets/logo_FTE_mainpage_2.png";
 import Avatar from "../Avatar";
+import useAuth from "src/hooks/useAuth";
 
 export default function Header() {
-  const isAuthenticated = useIsAuthenticated();
+  const { isAuthenticated } = useAuth();
+
   return (
     <header className="navbar bg-primary sticky top-0 z-50 rounded-b">
       <div className="navbar-start">

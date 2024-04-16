@@ -1,23 +1,18 @@
-import useSignOut from "react-auth-kit/hooks/useSignOut";
 import { Link, useNavigate } from "react-router-dom";
 import defaultAvatar from "src/assets/avatar-trang-4.jpg";
-import useAuthUser from "react-auth-kit/hooks/useAuthUser";
-
-type AuthState = {
-  name: string;
-  role: string;
-  uid: string;
-  email: string;
-};
+import useAuth from "src/hooks/useAuth";
 
 export default function Avatar() {
-  const signOut = useSignOut();
+  const { setIsAuthenticated, setUser, role } = useAuth();
   const navigate = useNavigate();
   const handleSignOut = () => {
-    signOut();
+    setIsAuthenticated(false);
+    setUser({
+      email: "",
+      password: "",
+    });
     navigate("/login");
   };
-  const auth = useAuthUser<AuthState>();
 
   return (
     <details className="dropdown dropdown-end">
@@ -32,7 +27,7 @@ export default function Avatar() {
         <li>
           <a>Profile</a>
         </li>
-        {auth?.role === "admin" && (
+        {role === "admin" && (
           <li>
             <Link to="/dashboard">Admin</Link>
           </li>

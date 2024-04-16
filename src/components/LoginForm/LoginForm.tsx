@@ -1,12 +1,11 @@
 import { useMutation } from "@tanstack/react-query";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { Link } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { login } from "src/api/Login/Login.api";
 import Logo from "src/assets/bk-logo.png";
+import useAuth from "src/hooks/useAuth";
 import { showNotification } from "../Notification/Notification";
-import { useNavigate } from "react-router-dom";
-import useSignIn from "react-auth-kit/hooks/useSignIn";
 
 type FormDataType = {
   email: string;
@@ -14,29 +13,26 @@ type FormDataType = {
 };
 
 export default function LoginForm() {
+  const { setIsAuthenticated, setToken, setUser, setRole } = useAuth();
   const form = useForm<FormDataType>();
   const { register, handleSubmit, formState } = form;
   const { errors } = formState;
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
-  const signIn = useSignIn();
+  const location = useLocation();
+  const from = location.state?.from.pathname || "/";
 
   const onSubmit = (data: FormDataType) => {
     const result = loginMutation.mutateAsync(data);
+
     result.then((res) => {
-      signIn({
-        auth: {
-          token: res.data.token,
-          type: "Bearer",
-        },
-        userState: {
-          name: res.data.user.name,
-          uid: res.data.user.id,
-          email: res.data.user.email,
-          role: res.data.user.role,
-        },
-      });
-      navigate("/");
+      if (res.data) {
+        setIsAuthenticated(true);
+        setToken(res.data.token);
+        setUser(res.data.user);
+        res.data.user.role === "admin" ? setRole("admin") : setRole("user");
+        navigate(from, { replace: true });
+      }
     });
   };
 
