@@ -1,4 +1,9 @@
-import { DashboardOutlined } from "@ant-design/icons";
+import {
+  DashboardOutlined,
+  UserOutlined,
+  ProductOutlined,
+  BookOutlined,
+} from "@ant-design/icons";
 
 export default function Sidebar() {
   return (
@@ -11,11 +16,41 @@ export default function Sidebar() {
         <ul className="space-y-2 font-medium">
           <li>
             <a
-              href="#"
-              className="flex items-center p-2 text-gray-900 rounded-lg  hover:bg-gray-100  group"
+              href="/dashboard"
+              className="flex items-center p-2 text-gray-900 rounded-lg hover:bg-gray-100 group"
             >
               <DashboardOutlined />
               <span className="ms-3">Quản lý</span>
+            </a>
+          </li>
+
+          <li>
+            <a
+              href="/dashboard/users"
+              className="flex items-center p-2 text-gray-900 rounded-lg hover:bg-gray-100 group"
+            >
+              <UserOutlined />
+              <span className="ms-3">Người dùng </span>
+            </a>
+          </li>
+
+          <li>
+            <a
+              href="/dashboard/models"
+              className="flex items-center p-2 text-gray-900 rounded-lg hover:bg-gray-100 group"
+            >
+              <ProductOutlined />
+              <span className="ms-3">Mô hình </span>
+            </a>
+          </li>
+
+          <li>
+            <a
+              href="/dashboard/subjects"
+              className="flex items-center p-2 text-gray-900 rounded-lg hover:bg-gray-100 group"
+            >
+              <BookOutlined />
+              <span className="ms-3">Môn học </span>
             </a>
           </li>
         </ul>
