@@ -1,4 +1,4 @@
-import { Col, Row } from "antd";
+import { Calendar, Col, Row } from "antd";
 import TotalCountCard from "src/components/Dashboard/TotalCountCard";
 
 export default function Dashboard() {
@@ -30,6 +30,7 @@ export default function Dashboard() {
         </Row>
         <Row gutter={[32, 32]}>
           <div></div>
+          <Calendar />
         </Row>
       </div>
     </div>
