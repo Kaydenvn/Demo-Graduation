@@ -1,39 +1,25 @@
 import { useQuery } from "@tanstack/react-query";
 import { useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { getUser } from "src/api/User.api";
 import defaultAvatar from "src/assets/avatar-trang-4.jpg";
 import useAuth from "src/hooks/useAuth";
 import http from "src/utils/http";
 
 export default function Avatar() {
-  const { setIsAuthenticated, setUser, role, user, setRole } = useAuth();
+  const { setIsAuthenticated, setUser, role, setRole } = useAuth();
 
-  const getUserById = async (id: string) => {
-    try {
-      const response = await http.get(`/api/users/${id}`);
-      const user = response.data;
-      setUser(user);
-      setRole(user.role);
-      return user;
-    } catch (error) {
-      console.error(error);
+  const userQuery = useQuery({
+    queryKey: ["user"],
+    queryFn: getUser,
+  });
+
+  useEffect(() => {
+    if (userQuery.data) {
+      setUser(userQuery.data);
+      setRole(userQuery.data.role);
     }
-  };
-
-  if (user?.id) {
-    // const userQuery = useQuery({
-    //   queryKey: ["user", user?.id],
-    //   queryFn: () => getUserById(user.id),
-    // });
-    // const userQueryData = userQuery.data;
-    // console.log(userQueryData);
-    // useEffect(() => {
-    //   if (userQueryData) {
-    //     setUser(userQueryData);
-    //     setRole(userQueryData.role);
-    //   }
-    // }, [user.id]);
-  }
+  }, [userQuery.data]);
 
   const navigate = useNavigate();
   const handleSignOut = () => {

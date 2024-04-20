@@ -11,16 +11,8 @@ const useRefreshToken = () => {
 
       setToken(data.token);
 
-      setUser({
-        id: data.user.id,
-        email: "",
-        name: "",
-        role: "",
-        status: "",
-        avatar: "",
-      });
-
       setIsAuthenticated(true);
+
       return data.token;
     } catch (error) {
       console.error(error);

@@ -7,4 +7,14 @@ const getAllUsers = async () => {
   return response.data;
 };
 
-export { getAllUsers };
+const getUser = async () => {
+  try {
+    const response = await http.get(`/api/users/me`);
+    const user = response.data;
+    return user;
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+export { getAllUsers, getUser };
