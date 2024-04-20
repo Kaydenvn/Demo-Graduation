@@ -1,25 +1,27 @@
+import { useEffect } from "react";
 import { useLocation, Navigate, Outlet } from "react-router-dom";
 import { showNotification } from "src/components/Notification/Notification";
 
 import useAuth from "src/hooks/useAuth";
+import useRefreshToken from "src/hooks/useRefreshToken";
 
 const showErrorMessage = () => {
-  showNotification("error", "You must be logged in to view this page");
+  showNotification("You must be logged in to view this page", "warning");
 };
 
 const RequireAuth = () => {
-  const { isAuthenticated } = useAuth();
+  const { token } = useAuth();
+  const refresh = useRefreshToken();
   const location = useLocation();
-  const from = location.state?.from.pathname;
 
-  return isAuthenticated ? (
-    <Outlet />
-  ) : from ? (
-    (showErrorMessage(),
-    (<Navigate to="/login" state={{ from: location }} replace />))
-  ) : (
-    <Navigate to="/login" replace />
-  );
+  if (!token) {
+    return <Navigate to="/login" />;
+  } else {
+    useEffect(() => {
+      refresh();
+    }, [location.pathname]);
+    return <Outlet />;
+  }
 };
 
 export default RequireAuth;

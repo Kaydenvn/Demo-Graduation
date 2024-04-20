@@ -29,7 +29,7 @@ export default function Dashboard() {
           </Col>
         </Row>
         <Row gutter={[32, 32]}>
-          <div></div>
+          <div>Lịch</div>
           <Calendar />
         </Row>
       </div>

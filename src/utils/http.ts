@@ -12,16 +12,18 @@ class Http {
       headers: {
         "Content-Type": "application/json",
       },
+      withCredentials: true,
     });
 
     this.instance.interceptors.request.use(
-      (response) => {
-        return response;
+      (config) => {
+        const token = localStorage.getItem("token");
+        if (token) {
+          config.headers["Authorization"] = `Bearer ${token}`;
+        }
+        return config;
       },
-
-      async (error: AxiosError) => {
-        return Promise.reject(error);
-      }
+      (error) => Promise.reject(error)
     );
   }
 }

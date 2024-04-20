@@ -2,7 +2,7 @@ import { useMutation } from "@tanstack/react-query";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { login } from "src/api/Login/Login.api";
+import { login } from "src/api/Login.api";
 import Logo from "src/assets/bk-logo.png";
 import useAuth from "src/hooks/useAuth";
 import { showNotification } from "../Notification/Notification";
@@ -29,6 +29,7 @@ export default function LoginForm() {
       if (res.data) {
         setIsAuthenticated(true);
         setToken(res.data.token);
+        window.localStorage.setItem("token", res.data.token);
         setUser(res.data.user);
         res.data.user.role === "admin" ? setRole("admin") : setRole("user");
         navigate(from, { replace: true });
