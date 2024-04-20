@@ -4,7 +4,6 @@ import { Link, useNavigate } from "react-router-dom";
 import { getUser } from "src/api/User.api";
 import defaultAvatar from "src/assets/avatar-trang-4.jpg";
 import useAuth from "src/hooks/useAuth";
-import http from "src/utils/http";
 
 export default function Avatar() {
   const { setIsAuthenticated, setUser, role, setRole } = useAuth();
@@ -19,7 +18,7 @@ export default function Avatar() {
       setUser(userQuery.data);
       setRole(userQuery.data.role);
     }
-  }, [userQuery.data]);
+  }, [userQuery.data, setUser, setRole]);
 
   const navigate = useNavigate();
   const handleSignOut = () => {

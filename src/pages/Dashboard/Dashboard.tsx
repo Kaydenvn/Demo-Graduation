@@ -1,5 +1,6 @@
 import { Calendar, Col, Row } from "antd";
 import TotalCountCard from "src/components/Dashboard/TotalCountCard";
+import Text from "src/components/Text";
 
 export default function Dashboard() {
   return (
@@ -29,7 +30,9 @@ export default function Dashboard() {
           </Col>
         </Row>
         <Row gutter={[32, 32]}>
-          <div>Lịch</div>
+          <Text className="mt-12" size="lg">
+            Thời Khoá Biểu:
+          </Text>
           <Calendar />
         </Row>
       </div>
