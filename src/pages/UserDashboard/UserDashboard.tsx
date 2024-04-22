@@ -70,7 +70,7 @@ const columns = function (
           {isDelete && (
             <Popconfirm
               title={"Bạn có chắc chắn muốn xoá người dùng này không?"}
-              onConfirm={() => callbackDelete(record.id)}
+              okButtonProps={{ className: "bg-soft" }}
             >
               <Button type="link" danger>
                 Xoá
@@ -163,7 +163,7 @@ export default function UserDashboard() {
         Người dùng
       </Text>
       <Flex className="mt-4">
-        <Button onClick={showAddUserModal} type="primary">
+        <Button onClick={showAddUserModal} className="bg-soft" type="primary">
           Thêm người dùng
         </Button>
       </Flex>
@@ -184,6 +184,7 @@ export default function UserDashboard() {
             setPage(page);
           },
         }}
+        rowKey={(record) => record.name}
       />
       <Modal
         title="Thêm người dùng"
@@ -200,6 +201,7 @@ export default function UserDashboard() {
           <Button
             key="submit"
             type="primary"
+            className="bg-soft"
             onClick={handleOkModal}
             loading={confirmLoading}
           >
