@@ -12,6 +12,7 @@ const Subject = React.lazy(() => import("./pages/Subject"));
 const Introduction = React.lazy(() => import("./pages/Introduction"));
 const Dashboard = React.lazy(() => import("./pages/Dashboard"));
 const PersistantLogin = React.lazy(() => import("./pages/PersistantLogin"));
+const UserDashboard = React.lazy(() => import("./pages/UserDashboard"));
 
 function App() {
   return (
@@ -27,9 +28,10 @@ function App() {
             <Route path="/introduction" element={<Introduction />} />
           </Route>
         </Route>
-        <Route element={<RequireAuth />}>
-          <Route path="/dashboard" element={<DashboardLayout />}>
+        <Route element={<DashboardLayout />}>
+          <Route element={<RequireAuth />}>
             <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/dashboard/users" element={<UserDashboard />} />
           </Route>
         </Route>
       </Route>
