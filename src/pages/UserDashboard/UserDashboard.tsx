@@ -13,7 +13,7 @@ import { useForm } from "antd/es/form/Form";
 import Password from "antd/es/input/Password";
 import Table, { ColumnsType } from "antd/es/table";
 import { useState } from "react";
-import { addUser, getAllUsers } from "src/api/User.api";
+import { addUser, deleteUser, getAllUsers } from "src/api/User.api";
 import { showNotification } from "src/components/Notification/Notification";
 import Text from "src/components/Text";
 
@@ -63,7 +63,7 @@ const columns = function (
       render: (_: string, record: IUser) => (
         <Space size="small">
           {isUpdate && (
-            <Button type="link" onClick={() => callbackEdit(record.id)}>
+            <Button type="link" onClick={() => callbackEdit(record._id)}>
               Sửa
             </Button>
           )}
@@ -72,7 +72,11 @@ const columns = function (
               title={"Bạn có chắc chắn muốn xoá người dùng này không?"}
               okButtonProps={{ className: "bg-soft" }}
             >
-              <Button type="link" danger>
+              <Button
+                type="link"
+                danger
+                onClick={() => callbackDelete(record._id)}
+              >
                 Xoá
               </Button>
             </Popconfirm>
@@ -93,7 +97,7 @@ export default function UserDashboard() {
   const initialFormState = {
     email: "",
     mssv: "",
-    id: "",
+    _id: "",
     name: "",
     role: "",
     status: "",
@@ -115,6 +119,23 @@ export default function UserDashboard() {
     },
     onSuccess: () => {
       showNotification("Thêm người dùng thành công", "success");
+      setConfirmLoading(false);
+    },
+  });
+
+  const deleteUserMutation = useMutation({
+    mutationFn: (id: string) => deleteUser(id),
+    onMutate: async () => {
+      setConfirmLoading(true);
+    },
+    onError: (error) => {
+      showNotification(error, "error");
+      setConfirmLoading(false);
+      setFormState(initialFormState);
+      setIsAddUser(false);
+    },
+    onSuccess: () => {
+      showNotification("Xoá người dùng thành công", "success");
       setConfirmLoading(false);
     },
   });
@@ -157,6 +178,14 @@ export default function UserDashboard() {
     form.resetFields();
   };
 
+  const handleDelete = (id: string) => {
+    deleteUserMutation.mutate(id, {
+      onSuccess: () => {
+        userQuery.refetch();
+      },
+    });
+  };
+
   return (
     <div className="p-4 sm:ml-64">
       <Text size="lg" className="font-bold">
@@ -169,12 +198,7 @@ export default function UserDashboard() {
       </Flex>
       <Table
         className="mt-4"
-        columns={columns(
-          true,
-          true,
-          () => {},
-          () => {}
-        )}
+        columns={columns(true, true, () => {}, handleDelete)}
         dataSource={userQuery.data?.data}
         pagination={{
           current: page,
@@ -184,7 +208,7 @@ export default function UserDashboard() {
             setPage(page);
           },
         }}
-        rowKey={(record) => record.name}
+        rowKey={(record) => record._id}
       />
       <Modal
         title="Thêm người dùng"

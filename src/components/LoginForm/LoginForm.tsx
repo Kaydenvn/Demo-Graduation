@@ -22,33 +22,32 @@ export default function LoginForm() {
   const location = useLocation();
   const from = location.state?.from.pathname || "/";
 
-  const onSubmit = (data: FormDataType) => {
-    const result = loginMutation.mutateAsync(data);
-
-    result.then((res) => {
-      if (res.data) {
-        setIsAuthenticated(true);
-        setToken(res.data.token);
-        window.localStorage.setItem("token", res.data.token);
-        setUser(res.data.user);
-        res.data.user.role === "admin" ? setRole("admin") : setRole("user");
-        navigate(from, { replace: true });
-      }
-    });
-  };
-
   const loginMutation = useMutation({
     mutationFn: login,
     onMutate: () => {
       setLoading(true);
     },
-    onError: (error) => {
-      console.error(error);
-    },
-    onSuccess: () => {
-      showNotification("Đăng nhập thành công", "success");
-    },
   });
+
+  const onSubmit = (data: FormDataType) => {
+    const result = loginMutation.mutateAsync(data);
+
+    result
+      .then((res) => {
+        if (res.data) {
+          setIsAuthenticated(true);
+          setToken(res.data.token);
+          window.localStorage.setItem("token", res.data.token);
+          setUser(res.data.user);
+          res.data.user.role === "admin" ? setRole("admin") : setRole("user");
+          navigate(from, { replace: true });
+        }
+      })
+      .catch((error) => {
+        showNotification(error.response.data.message, "error");
+        setLoading(false);
+      });
+  };
 
   return (
     <div className="lg:w-2/6 md:w-1/2 bg-gray-50 rounded-lg p-8 flex flex-col md:ml-10 w-full mt-10 md:mt-0">

@@ -3,7 +3,7 @@ import http from "src/utils/http";
 
 const controller = "/api/users";
 
-const getAllUsers = async (page: number, pageSize: number) => {
+export const getAllUsers = async (page: number, pageSize: number) => {
   const response = await http.get(`${controller}`, {
     params: {
       page,
@@ -13,7 +13,7 @@ const getAllUsers = async (page: number, pageSize: number) => {
   return response.data;
 };
 
-const getUser = async () => {
+export const getUser = async () => {
   try {
     const response = await http.get(`${controller}/me`);
     const user = response.data;
@@ -34,4 +34,6 @@ export const addUser = async (data: IUser) => {
   });
 };
 
-export { getAllUsers, getUser };
+export const deleteUser = async (id: string) => {
+  return http.delete(`${controller}/${id}`);
+};
