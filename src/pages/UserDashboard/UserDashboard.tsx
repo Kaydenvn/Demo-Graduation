@@ -7,6 +7,7 @@ import {
   Modal,
   Popconfirm,
   Select,
+  Skeleton,
   Space,
 } from "antd";
 import { useForm } from "antd/es/form/Form";
@@ -196,20 +197,25 @@ export default function UserDashboard() {
           Thêm người dùng
         </Button>
       </Flex>
-      <Table
-        className="mt-4"
-        columns={columns(true, true, () => {}, handleDelete)}
-        dataSource={userQuery.data?.data}
-        pagination={{
-          current: page,
-          pageSize,
-          total: userQuery.data?.total_pages,
-          onChange: (page) => {
-            setPage(page);
-          },
-        }}
-        rowKey={(record) => record._id}
-      />
+      {userQuery.isLoading ? (
+        <Skeleton active />
+      ) : (
+        <Table
+          className="mt-4"
+          columns={columns(true, true, () => {}, handleDelete)}
+          dataSource={userQuery.data?.data}
+          pagination={{
+            current: page,
+            pageSize,
+            total: userQuery.data?.total_pages,
+            onChange: (page) => {
+              setPage(page);
+            },
+          }}
+          rowKey={(record) => record._id}
+        />
+      )}
+
       <Modal
         title="Thêm người dùng"
         open={isAddUser}
