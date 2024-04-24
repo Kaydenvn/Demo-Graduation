@@ -23,6 +23,14 @@ export const getUser = async () => {
   }
 };
 
+export const getUserById = async (id: string) => {
+  if (!id) {
+    return;
+  }
+  const response = await http.get(`${controller}/${id}`);
+  return response.data;
+};
+
 export const addUser = async (data: IUser) => {
   return http.post(`${controller}/register`, {
     mssv: data.mssv,
@@ -36,4 +44,15 @@ export const addUser = async (data: IUser) => {
 
 export const deleteUser = async (id: string) => {
   return http.delete(`${controller}/${id}`);
+};
+
+export const updateUser = async (data: IUser) => {
+  return http.put(`${controller}/${data._id}`, {
+    mssv: data.mssv,
+    name: data.name,
+    email: data.email,
+    role: data.role,
+    status: data.status,
+    password: data.password,
+  });
 };

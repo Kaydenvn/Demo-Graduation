@@ -1,23 +1,12 @@
-import { useMutation, useQuery } from "@tanstack/react-query";
-import {
-  Button,
-  Flex,
-  Form,
-  Input,
-  Modal,
-  Popconfirm,
-  Select,
-  Skeleton,
-  Space,
-} from "antd";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { Button, Flex, Popconfirm, Skeleton, Space } from "antd";
 import { useForm } from "antd/es/form/Form";
-import Password from "antd/es/input/Password";
 import Table, { ColumnsType } from "antd/es/table";
-import { useState } from "react";
-import { addUser, deleteUser, getAllUsers } from "src/api/User.api";
+import { Fragment, useState } from "react";
+import { deleteUser, getAllUsers } from "src/api/User.api";
 import { showNotification } from "src/components/Notification/Notification";
 import Text from "src/components/Text";
-
+import AddAsset from "./AddUserDashboard";
 import { IUser } from "src/types/User.type";
 
 // user value column of antd table
@@ -89,95 +78,34 @@ const columns = function (
   return columnTitle;
 };
 
+export interface OpenType {
+  isOpen: boolean;
+  id?: string;
+}
+
 export default function UserDashboard() {
   const pageSize = 10;
   const [page, setPage] = useState(1);
-  const [isAddUser, setIsAddUser] = useState(false);
-  const [confirmLoading, setConfirmLoading] = useState(false);
-  const [form] = useForm();
-  const initialFormState = {
-    email: "",
-    mssv: "",
-    _id: "",
-    name: "",
-    role: "",
-    status: "",
-    avatar: "",
-    password: "",
-  };
-  const [formState, setFormState] = useState<IUser>(initialFormState);
+  const clientQuery = useQueryClient();
 
-  const addUserMutation = useMutation({
-    mutationFn: (data: IUser) => addUser(data),
-    onMutate: async () => {
-      setConfirmLoading(true);
-    },
-    onError: (error) => {
-      showNotification(error, "error");
-      setConfirmLoading(false);
-      setFormState(initialFormState);
-      setIsAddUser(false);
-    },
-    onSuccess: () => {
-      showNotification("Thêm người dùng thành công", "success");
-      setConfirmLoading(false);
-    },
-  });
+  const [open, setOpen] = useState<OpenType>({ isOpen: false });
 
   const deleteUserMutation = useMutation({
     mutationFn: (id: string) => deleteUser(id),
-    onMutate: async () => {
-      setConfirmLoading(true);
-    },
+
     onError: (error) => {
       showNotification(error, "error");
-      setConfirmLoading(false);
-      setFormState(initialFormState);
-      setIsAddUser(false);
     },
     onSuccess: () => {
       showNotification("Xoá người dùng thành công", "success");
-      setConfirmLoading(false);
     },
   });
-
-  const showAddUserModal = () => {
-    setIsAddUser(true);
-  };
 
   const userQuery = useQuery({
     queryKey: ["usersTable"],
     queryFn: () => getAllUsers(page, pageSize),
     staleTime: 60 * 1000,
   });
-
-  const handleOkModal = () => {
-    setConfirmLoading(true);
-    form
-      .validateFields()
-      .then(() => {
-        addUserMutation.mutate(formState, {
-          onSuccess: () => {
-            userQuery.refetch();
-            showNotification("Thêm người dùng thành công", "success");
-            setFormState(initialFormState);
-            setConfirmLoading(false);
-            setIsAddUser(false);
-            setFormState(initialFormState);
-            form.resetFields();
-          },
-        });
-      })
-      .catch((info) => {
-        showNotification(info, "error");
-      });
-  };
-
-  const handleCancelModal = () => {
-    setIsAddUser(false);
-    setFormState(initialFormState);
-    form.resetFields();
-  };
 
   const handleDelete = (id: string) => {
     deleteUserMutation.mutate(id, {
@@ -187,143 +115,56 @@ export default function UserDashboard() {
     });
   };
 
+  const handleEdit = (id: string) => {
+    setOpen({ isOpen: true, id: id });
+  };
+
+  const handleInvalidate = () => {
+    clientQuery.invalidateQueries({
+      queryKey: ["usersTable"],
+    });
+  };
+
   return (
-    <div className="p-4 sm:ml-64">
-      <Text size="lg" className="font-bold">
-        Người dùng
-      </Text>
-      <Flex className="mt-4">
-        <Button onClick={showAddUserModal} className="bg-soft" type="primary">
-          Thêm người dùng
-        </Button>
-      </Flex>
-      {userQuery.isLoading ? (
-        <Skeleton active />
-      ) : (
-        <Table
-          className="mt-4"
-          columns={columns(true, true, () => {}, handleDelete)}
-          dataSource={userQuery.data?.data}
-          pagination={{
-            current: page,
-            pageSize,
-            total: userQuery.data?.total_pages,
-            onChange: (page) => {
-              setPage(page);
-            },
-          }}
-          rowKey={(record) => record._id}
-        />
-      )}
-
-      <Modal
-        title="Thêm người dùng"
-        open={isAddUser}
-        onOk={handleOkModal}
-        confirmLoading={confirmLoading}
-        onCancel={handleCancelModal}
-        style={{ maxWidth: 700 }}
-        maskClosable={false}
-        footer={[
-          <Button key="back" onClick={handleCancelModal}>
-            Huỷ
-          </Button>,
+    <Fragment>
+      <div className="p-4 sm:ml-64">
+        <Text size="lg" className="font-bold">
+          Người dùng
+        </Text>
+        <Flex className="mt-4">
           <Button
-            key="submit"
-            type="primary"
+            onClick={() => setOpen({ isOpen: true })}
             className="bg-soft"
-            onClick={handleOkModal}
-            loading={confirmLoading}
+            type="primary"
           >
-            Xác nhận
-          </Button>,
-        ]}
-      >
-        <Form
-          labelCol={{ span: 5 }}
-          wrapperCol={{ span: 18, offset: 1 }}
-          form={form}
-          layout="horizontal"
-        >
-          <Form.Item<IUser>
-            label="MSSV"
-            name="mssv"
-            rules={[{ required: true, message: "Please input your username!" }]}
-          >
-            <Input
-              onChange={(e) => {
-                setFormState({ ...formState, mssv: e.target.value });
-              }}
-            />
-          </Form.Item>
-
-          <Form.Item<IUser>
-            label="Họ và tên"
-            name="name"
-            rules={[{ required: true, message: "Please input your username!" }]}
-          >
-            <Input
-              onChange={(e) => {
-                setFormState({ ...formState, name: e.target.value });
-              }}
-            />
-          </Form.Item>
-
-          <Form.Item<IUser>
-            label="Email"
-            name="email"
-            rules={[{ required: true, message: "Please input your username!" }]}
-          >
-            <Input
-              onChange={(e) => {
-                setFormState({ ...formState, email: e.target.value });
-              }}
-            />
-          </Form.Item>
-
-          <Form.Item<IUser>
-            label="Role"
-            name="role"
-            rules={[{ required: true, message: "Please input your username!" }]}
-          >
-            <Select
-              onChange={(value) => {
-                setFormState({ ...formState, role: value });
-              }}
-            >
-              <Select.Option value="admin">Admin</Select.Option>
-              <Select.Option value="user">User</Select.Option>
-            </Select>
-          </Form.Item>
-
-          <Form.Item<IUser>
-            label="Status"
-            name="status"
-            rules={[{ required: true, message: "Please input your username!" }]}
-          >
-            <Select
-              onChange={(value) => {
-                setFormState({ ...formState, status: value });
-              }}
-            >
-              <Select.Option value="active">Active</Select.Option>
-              <Select.Option value="inactive">Inactive</Select.Option>
-            </Select>
-          </Form.Item>
-
-          <Form.Item<IUser>
-            label="Password"
-            name="password"
-            rules={[{ required: true, message: "Please input your password!" }]}
-          >
-            <Password
-              onChange={(e) => {
-                setFormState({ ...formState, password: e.target.value });
-              }}
-            />
-          </Form.Item>
-        </Form>
-      </Modal>
-    </div>
+            Thêm người dùng
+          </Button>
+        </Flex>
+        {userQuery.isLoading ? (
+          <Skeleton active />
+        ) : (
+          <Table
+            className="mt-4"
+            columns={columns(true, true, handleEdit, handleDelete)}
+            dataSource={userQuery.data?.data}
+            loading={userQuery.isLoading}
+            pagination={{
+              current: page,
+              pageSize,
+              total: userQuery.data?.total_pages,
+              onChange: (page) => {
+                setPage(page);
+              },
+            }}
+            rowKey={(record) => record._id}
+          />
+        )}
+      </div>
+      <AddAsset
+        open={open}
+        setOpen={setOpen}
+        handleInvalidate={handleInvalidate}
+      />
+    </Fragment>
   );
 }
