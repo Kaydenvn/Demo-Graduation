@@ -1,13 +1,15 @@
 import React, { useEffect, useState } from "react";
-import { OpenType } from "./UserDashboard";
-import { Button, Form, Input, Modal, Select, Skeleton } from "antd";
+import { OpenType } from "./ModelDashboard";
+import { Button, DatePicker, Form, Input, Modal, Select, Skeleton } from "antd";
 import { useForm } from "antd/es/form/Form";
 
-import { IUser } from "src/types/User.type";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { addUser, getUserById, updateUser } from "src/api/User.api";
 import { showNotification } from "src/components/Notification/Notification";
 import Password from "antd/es/input/Password";
+import { addModel, getModelById, updateModel } from "src/api/Model.api";
+import { IModel } from "src/types/Model.type";
+import dayjs from "dayjs";
 
 interface Props {
   open: OpenType;
@@ -15,28 +17,27 @@ interface Props {
   handleInvalidate: () => void;
 }
 
-const initialFormState: IUser = {
-  mssv: "",
-  name: "",
-  email: "",
-  role: "",
-  status: "",
+const initialFormState: IModel = {
   _id: "",
-  avatar: "",
-  password: "",
+  title: "",
+  description: "",
+  startDate: "",
+  modelType: "",
+  maintainTime: "",
+  photo: [""],
 };
 
-export default function AddUserDashboard({
+export default function AddModelDashboard({
   open,
   setOpen,
   handleInvalidate,
 }: Props) {
   const [form] = useForm();
-  const [formState, setFormState] = useState<IUser>(initialFormState);
+  const [formState, setFormState] = useState<IModel>(initialFormState);
   const [confirmLoading, setConfirmLoading] = useState(false);
 
-  const addUserMutation = useMutation({
-    mutationFn: (data: IUser) => addUser(data),
+  const addModelMutation = useMutation({
+    mutationFn: (data: IModel) => addModel(data),
     onMutate: async () => {
       setConfirmLoading(true);
     },
@@ -54,7 +55,7 @@ export default function AddUserDashboard({
   const isEdit = Boolean(open.id);
 
   const updateUserMutation = useMutation({
-    mutationFn: (data: IUser) => updateUser(data),
+    mutationFn: (data: IModel) => updateModel(data),
     onMutate: async () => {
       setConfirmLoading(true);
     },
@@ -69,24 +70,26 @@ export default function AddUserDashboard({
     },
   });
 
-  const userbyIdQuery = useQuery({
-    queryKey: ["userById", open.id],
+  const modelByIdQuery = useQuery({
+    queryKey: ["ModelById", open.id],
     queryFn: () => {
       if (open.id) {
-        return getUserById(open.id);
+        return getModelById(open.id);
       }
     },
     enabled: !!open.id,
   });
   useEffect(() => {
-    if (userbyIdQuery.isSuccess) {
+    if (modelByIdQuery.isSuccess) {
       const editUser = {
-        ...userbyIdQuery.data,
-        password: "",
+        ...modelByIdQuery.data,
+        maintainTime: dayjs(modelByIdQuery.data.maintainTime),
+        startDate: dayjs(modelByIdQuery.data.startDate),
       };
+
       setFormState(editUser);
     }
-  }, [userbyIdQuery.data]);
+  }, [modelByIdQuery.data]);
 
   const handleCancelModal = () => {
     setOpen({ isOpen: false });
@@ -110,7 +113,7 @@ export default function AddUserDashboard({
             },
           });
         } else {
-          addUserMutation.mutate(formState, {
+          addModelMutation.mutate(formState, {
             onSuccess: () => {
               handleInvalidate();
               showNotification("Thêm người dùng thành công", "success");
@@ -150,104 +153,105 @@ export default function AddUserDashboard({
         </Button>,
       ]}
     >
-      {userbyIdQuery.isFetching && isEdit ? (
+      {modelByIdQuery.isFetching && isEdit ? (
         <Skeleton active paragraph={{ rows: 6 }} />
       ) : (
         <Form
-          labelCol={{ span: 5 }}
-          wrapperCol={{ span: 16, offset: 1 }}
+          labelCol={{ span: 18 }}
+          wrapperCol={{ span: 20, offset: 1 }}
           form={form}
-          layout="horizontal"
+          layout="vertical"
           fields={[
-            { name: ["mssv"], value: formState.mssv },
-            { name: ["name"], value: formState.name },
-            { name: ["email"], value: formState.email },
-            { name: ["role"], value: formState.role },
-            { name: ["status"], value: formState.status },
-            { name: ["password"], value: formState.password },
+            { name: ["title"], value: formState.title },
+            { name: ["description"], value: formState.description },
+            { name: ["modelType"], value: formState.modelType },
+            { name: ["maintainTime"], value: dayjs(formState.maintainTime) },
+            { name: ["photo"], value: formState.photo.map((item) => item) },
+            { name: ["startDate"], value: dayjs(formState.startDate) },
           ]}
         >
-          <Form.Item<IUser>
-            label="MSSV"
-            name="mssv"
-            rules={[{ required: true, message: "Please input your username!" }]}
+          <Form.Item<IModel>
+            label="Tên mô hình"
+            name="title"
+            rules={[{ required: true, message: " Hãy nhập tên mô hình!" }]}
           >
             <Input
               onChange={(e) => {
-                setFormState({ ...formState, mssv: e.target.value });
+                setFormState({ ...formState, title: e.target.value });
               }}
             />
           </Form.Item>
 
-          <Form.Item<IUser>
-            label="Họ và tên"
-            name="name"
-            rules={[{ required: true, message: "Please input your username!" }]}
+          <Form.Item<IModel>
+            label="Mô tả"
+            name="description"
+            rules={[{ required: true, message: "Hãy nhập mô tả mô hình!" }]}
           >
             <Input
               onChange={(e) => {
-                setFormState({ ...formState, name: e.target.value });
+                setFormState({ ...formState, description: e.target.value });
               }}
             />
           </Form.Item>
 
-          <Form.Item<IUser>
-            label="Email"
-            name="email"
-            rules={[{ required: true, message: "Please input your username!" }]}
+          <Form.Item<IModel>
+            label="Loại mô hình"
+            name="modelType"
+            rules={[{ required: true, message: "Hãy nhập loại mô hình!" }]}
           >
             <Input
               onChange={(e) => {
-                setFormState({ ...formState, email: e.target.value });
+                setFormState({ ...formState, modelType: e.target.value });
               }}
             />
           </Form.Item>
 
-          <Form.Item<IUser>
-            label="Role"
-            name="role"
-            rules={[{ required: true, message: "Please input your username!" }]}
+          <Form.Item<IModel>
+            label="Ngày nhập xưởng"
+            name="startDate"
+            rules={[{ required: true, message: "Hãy nhập ngày bảo dưỡng!" }]}
           >
-            <Select
-              onChange={(value) => {
-                setFormState({ ...formState, role: value });
+            <DatePicker
+              onChange={(date, dateString) => {
+                setFormState({
+                  ...formState,
+                  startDate: dateString.toString(),
+                });
               }}
-            >
-              <Select.Option value="admin">Admin</Select.Option>
-              <Select.Option value="user">User</Select.Option>
-            </Select>
+            />
           </Form.Item>
 
-          <Form.Item<IUser>
-            label="Status"
-            name="status"
-            rules={[{ required: true, message: "Please input your username!" }]}
+          <Form.Item<IModel>
+            label="Ngày bảo dưỡng"
+            name="maintainTime"
+            rules={[{ required: true, message: "Hãy nhập ngày bảo dưỡng!" }]}
           >
-            <Select
-              onChange={(value) => {
-                setFormState({ ...formState, status: value });
+            <DatePicker
+              onChange={(date, dateString) => {
+                setFormState({
+                  ...formState,
+                  maintainTime: dateString.toString(),
+                });
               }}
-            >
-              <Select.Option value="active">Active</Select.Option>
-              <Select.Option value="inactive">Inactive</Select.Option>
-            </Select>
+            />
           </Form.Item>
 
-          {!isEdit && (
-            <Form.Item<IUser>
-              label="Password"
-              name="password"
-              rules={[
-                { required: true, message: "Please input your password!" },
-              ]}
-            >
-              <Password
-                onChange={(e) => {
-                  setFormState({ ...formState, password: e.target.value });
-                }}
-              />
-            </Form.Item>
-          )}
+          <Form.Item<IModel>
+            label="Ảnh mô hình (Các link cách nhau bởi dấu phẩy (,) )"
+            name="photo"
+            rules={[{ required: true, message: "Please input your username!" }]}
+            style={{}}
+          >
+            <Input
+              onChange={(e) => {
+                setFormState({
+                  ...formState,
+                  // return array of photo
+                  photo: e.target.value.split(","),
+                });
+              }}
+            />
+          </Form.Item>
         </Form>
       )}
     </Modal>

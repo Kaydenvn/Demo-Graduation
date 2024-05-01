@@ -13,6 +13,7 @@ const Introduction = React.lazy(() => import("./pages/Introduction"));
 const Dashboard = React.lazy(() => import("./pages/Dashboard"));
 const PersistantLogin = React.lazy(() => import("./pages/PersistantLogin"));
 const UserDashboard = React.lazy(() => import("./pages/UserDashboard"));
+const ModelDashboard = React.lazy(() => import("./pages/ModelDashboard"));
 
 function App() {
   return (
@@ -32,6 +33,7 @@ function App() {
           <Route element={<RequireAuth />}>
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/dashboard/users" element={<UserDashboard />} />
+            <Route path="/dashboard/models" element={<ModelDashboard />} />
           </Route>
         </Route>
       </Route>

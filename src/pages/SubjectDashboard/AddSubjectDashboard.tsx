@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { OpenType } from "./UserDashboard";
+import { OpenType } from "./SubjectDashboard";
 import { Button, Form, Input, Modal, Select, Skeleton } from "antd";
 import { useForm } from "antd/es/form/Form";
 
@@ -26,7 +26,7 @@ const initialFormState: IUser = {
   password: "",
 };
 
-export default function AddUserDashboard({
+export default function AddModelDashboard({
   open,
   setOpen,
   handleInvalidate,
@@ -155,7 +155,7 @@ export default function AddUserDashboard({
       ) : (
         <Form
           labelCol={{ span: 5 }}
-          wrapperCol={{ span: 16, offset: 1 }}
+          wrapperCol={{ span: 18, offset: 1 }}
           form={form}
           layout="horizontal"
           fields={[
