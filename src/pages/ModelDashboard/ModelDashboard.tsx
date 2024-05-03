@@ -2,11 +2,10 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Button, Flex, Popconfirm, Skeleton, Space } from "antd";
 import Table, { ColumnsType } from "antd/es/table";
 import { Fragment, useState } from "react";
-import { getAllModels } from "src/api/Model.api";
-import { deleteUser } from "src/api/User.api";
+import { deleteModel, getAllModels } from "src/api/Model.api";
 import { showNotification } from "src/components/Notification/Notification";
 import Text from "src/components/Text";
-import { IUser } from "src/types/User.type";
+import { IModel } from "src/types/Model.type";
 import AddAsset from "./AddModelDashboard";
 
 // user value column of antd table
@@ -15,8 +14,8 @@ const columns = function (
   isDelete: boolean,
   callbackEdit: (id: string) => void,
   callbackDelete: (id: string) => void
-): ColumnsType<IUser> {
-  const columnTitle: ColumnsType<IUser> = [
+): ColumnsType<IModel> {
+  const columnTitle: ColumnsType<IModel> = [
     {
       title: "Tên mô hình",
       dataIndex: "title",
@@ -36,22 +35,28 @@ const columns = function (
       title: "Ngày nhập xưởng",
       dataIndex: "startDate",
       key: "startDate",
+      render: (_: string, record: IModel) =>
+        record.startDate && new Date(record.startDate).toLocaleDateString(),
     },
     {
       title: "Ngày bảo dưỡng",
       dataIndex: "maintainTime",
       key: "maintainTime",
+      render: (_: string, record: IModel) =>
+        record.maintainTime &&
+        new Date(record.maintainTime).toLocaleDateString(),
     },
     {
       title: "Ảnh mô hình",
       key: "photo",
+      dataIndex: "photo",
     },
     {
       title: "Thao tác",
       key: "action",
       align: "center",
       width: 100,
-      render: (_: string, record: IUser) => (
+      render: (_: string, record: IModel) => (
         <Space size="small">
           {isUpdate && (
             <Button type="link" onClick={() => callbackEdit(record._id)}>
@@ -92,7 +97,7 @@ export default function ModelDashboard() {
   const [open, setOpen] = useState<OpenType>({ isOpen: false });
 
   const deleteUserMutation = useMutation({
-    mutationFn: (id: string) => deleteUser(id),
+    mutationFn: (id: string) => deleteModel(id),
 
     onError: (error) => {
       showNotification(error, "error");

@@ -24,7 +24,15 @@ export const addModel = async (data: IModel) => {
 };
 
 export const updateModel = async (data: IModel) => {
-  const response = await http.put(`${controller}`, data);
+  const response = await http.put(`${controller}`, {
+    _id: data._id,
+    title: data.title,
+    description: data.description,
+    startDate: data.startDate,
+    modelType: data.modelType,
+    maintainTime: data.maintainTime,
+    photo: data.photo,
+  });
   return response.data;
 };
 

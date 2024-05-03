@@ -1,15 +1,13 @@
+import { Button, DatePicker, Form, Input, Modal, Skeleton } from "antd";
+import { useForm } from "antd/es/form/Form";
 import React, { useEffect, useState } from "react";
 import { OpenType } from "./ModelDashboard";
-import { Button, DatePicker, Form, Input, Modal, Select, Skeleton } from "antd";
-import { useForm } from "antd/es/form/Form";
 
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { addUser, getUserById, updateUser } from "src/api/User.api";
-import { showNotification } from "src/components/Notification/Notification";
-import Password from "antd/es/input/Password";
-import { addModel, getModelById, updateModel } from "src/api/Model.api";
-import { IModel } from "src/types/Model.type";
 import dayjs from "dayjs";
+import { addModel, getModelById, updateModel } from "src/api/Model.api";
+import { showNotification } from "src/components/Notification/Notification";
+import { IModel } from "src/types/Model.type";
 
 interface Props {
   open: OpenType;
@@ -17,13 +15,16 @@ interface Props {
   handleInvalidate: () => void;
 }
 
+const day = dayjs();
+const today = day.format("YYYY-MM-DD");
+
 const initialFormState: IModel = {
   _id: "",
   title: "",
   description: "",
-  startDate: "",
+  startDate: today,
   modelType: "",
-  maintainTime: "",
+  maintainTime: today,
   photo: [""],
 };
 
@@ -54,7 +55,7 @@ export default function AddModelDashboard({
 
   const isEdit = Boolean(open.id);
 
-  const updateUserMutation = useMutation({
+  const updateModelMutation = useMutation({
     mutationFn: (data: IModel) => updateModel(data),
     onMutate: async () => {
       setConfirmLoading(true);
@@ -103,7 +104,7 @@ export default function AddModelDashboard({
       .validateFields()
       .then(() => {
         if (isEdit) {
-          updateUserMutation.mutate(formState, {
+          updateModelMutation.mutate(formState, {
             onSuccess: () => {
               handleInvalidate();
               showNotification("Cập nhật người dùng thành công", "success");
@@ -165,9 +166,15 @@ export default function AddModelDashboard({
             { name: ["title"], value: formState.title },
             { name: ["description"], value: formState.description },
             { name: ["modelType"], value: formState.modelType },
-            { name: ["maintainTime"], value: dayjs(formState.maintainTime) },
+            {
+              name: ["maintainTime"],
+              value: dayjs(formState.maintainTime),
+            },
             { name: ["photo"], value: formState.photo.map((item) => item) },
-            { name: ["startDate"], value: dayjs(formState.startDate) },
+            {
+              name: ["startDate"],
+              value: dayjs(formState.startDate),
+            },
           ]}
         >
           <Form.Item<IModel>
@@ -215,8 +222,9 @@ export default function AddModelDashboard({
               onChange={(date, dateString) => {
                 setFormState({
                   ...formState,
-                  startDate: dateString.toString(),
+                  startDate: date.format("YYYY-MM-DD"),
                 });
+                console.log("formState", formState);
               }}
             />
           </Form.Item>
@@ -230,7 +238,7 @@ export default function AddModelDashboard({
               onChange={(date, dateString) => {
                 setFormState({
                   ...formState,
-                  maintainTime: dateString.toString(),
+                  maintainTime: date.format("YYYY-MM-DD"),
                 });
               }}
             />
