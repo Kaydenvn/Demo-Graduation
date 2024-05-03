@@ -86,7 +86,7 @@ export default function AddUserDashboard({
       };
       setFormState(editUser);
     }
-  }, [userbyIdQuery.data]);
+  }, [userbyIdQuery.data, userbyIdQuery.isSuccess]);
 
   const handleCancelModal = () => {
     setOpen({ isOpen: false });

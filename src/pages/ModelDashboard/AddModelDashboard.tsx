@@ -8,6 +8,7 @@ import dayjs from "dayjs";
 import { addModel, getModelById, updateModel } from "src/api/Model.api";
 import { showNotification } from "src/components/Notification/Notification";
 import { IModel } from "src/types/Model.type";
+import TextArea from "antd/es/input/TextArea";
 
 interface Props {
   open: OpenType;
@@ -90,7 +91,7 @@ export default function AddModelDashboard({
 
       setFormState(editUser);
     }
-  }, [modelByIdQuery.data]);
+  }, [modelByIdQuery.data, modelByIdQuery.isSuccess]);
 
   const handleCancelModal = () => {
     setOpen({ isOpen: false });
@@ -219,7 +220,7 @@ export default function AddModelDashboard({
             rules={[{ required: true, message: "Hãy nhập ngày bảo dưỡng!" }]}
           >
             <DatePicker
-              onChange={(date, dateString) => {
+              onChange={(date) => {
                 setFormState({
                   ...formState,
                   startDate: date.format("YYYY-MM-DD"),
@@ -235,7 +236,7 @@ export default function AddModelDashboard({
             rules={[{ required: true, message: "Hãy nhập ngày bảo dưỡng!" }]}
           >
             <DatePicker
-              onChange={(date, dateString) => {
+              onChange={(date) => {
                 setFormState({
                   ...formState,
                   maintainTime: date.format("YYYY-MM-DD"),
@@ -250,7 +251,8 @@ export default function AddModelDashboard({
             rules={[{ required: true, message: "Please input your username!" }]}
             style={{}}
           >
-            <Input
+            <TextArea
+              rows={4}
               onChange={(e) => {
                 setFormState({
                   ...formState,

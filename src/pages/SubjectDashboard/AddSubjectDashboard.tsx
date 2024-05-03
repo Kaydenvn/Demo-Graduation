@@ -1,13 +1,14 @@
+import { Button, Form, Input, Modal, Skeleton } from "antd";
+import { useForm } from "antd/es/form/Form";
 import React, { useEffect, useState } from "react";
 import { OpenType } from "./SubjectDashboard";
-import { Button, Form, Input, Modal, Select, Skeleton } from "antd";
-import { useForm } from "antd/es/form/Form";
 
-import { IUser } from "src/types/User.type";
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { addUser, getUserById, updateUser } from "src/api/User.api";
+import { addSubject, updateSubject } from "src/api/Subject.api";
+import { getUserById } from "src/api/User.api";
 import { showNotification } from "src/components/Notification/Notification";
-import Password from "antd/es/input/Password";
+import { ISubject } from "src/types/Subject.type";
+import TextArea from "antd/es/input/TextArea";
 
 interface Props {
   open: OpenType;
@@ -15,28 +16,26 @@ interface Props {
   handleInvalidate: () => void;
 }
 
-const initialFormState: IUser = {
-  mssv: "",
-  name: "",
-  email: "",
-  role: "",
-  status: "",
+const initialFormState: ISubject = {
   _id: "",
-  avatar: "",
-  password: "",
+  title: "",
+  description: "",
+  nameOfdocs: [],
+  linkOfdocs: [],
+  creator: "",
 };
 
-export default function AddModelDashboard({
+export default function AddSubjectDashboard({
   open,
   setOpen,
   handleInvalidate,
 }: Props) {
   const [form] = useForm();
-  const [formState, setFormState] = useState<IUser>(initialFormState);
+  const [formState, setFormState] = useState<ISubject>(initialFormState);
   const [confirmLoading, setConfirmLoading] = useState(false);
 
-  const addUserMutation = useMutation({
-    mutationFn: (data: IUser) => addUser(data),
+  const addSubjectMutation = useMutation({
+    mutationFn: (data: ISubject) => addSubject(data),
     onMutate: async () => {
       setConfirmLoading(true);
     },
@@ -46,15 +45,15 @@ export default function AddModelDashboard({
       setFormState(initialFormState);
     },
     onSuccess: () => {
-      showNotification("Thêm người dùng thành công", "success");
+      showNotification("Thêm môn học thành công", "success");
       setConfirmLoading(false);
     },
   });
 
   const isEdit = Boolean(open.id);
 
-  const updateUserMutation = useMutation({
-    mutationFn: (data: IUser) => updateUser(data),
+  const updateSubjectMutation = useMutation({
+    mutationFn: (data: ISubject) => updateSubject(data),
     onMutate: async () => {
       setConfirmLoading(true);
     },
@@ -64,7 +63,7 @@ export default function AddModelDashboard({
       setFormState(initialFormState);
     },
     onSuccess: () => {
-      showNotification("Cập nhật người dùng thành công", "success");
+      showNotification("Cập nhật môn học thành công", "success");
       setConfirmLoading(false);
     },
   });
@@ -86,7 +85,7 @@ export default function AddModelDashboard({
       };
       setFormState(editUser);
     }
-  }, [userbyIdQuery.data]);
+  }, [userbyIdQuery.data, userbyIdQuery.isSuccess]);
 
   const handleCancelModal = () => {
     setOpen({ isOpen: false });
@@ -100,7 +99,7 @@ export default function AddModelDashboard({
       .validateFields()
       .then(() => {
         if (isEdit) {
-          updateUserMutation.mutate(formState, {
+          updateSubjectMutation.mutate(formState, {
             onSuccess: () => {
               handleInvalidate();
               showNotification("Cập nhật người dùng thành công", "success");
@@ -110,7 +109,7 @@ export default function AddModelDashboard({
             },
           });
         } else {
-          addUserMutation.mutate(formState, {
+          addSubjectMutation.mutate(formState, {
             onSuccess: () => {
               handleInvalidate();
               showNotification("Thêm người dùng thành công", "success");
@@ -154,100 +153,85 @@ export default function AddModelDashboard({
         <Skeleton active paragraph={{ rows: 6 }} />
       ) : (
         <Form
-          labelCol={{ span: 5 }}
-          wrapperCol={{ span: 18, offset: 1 }}
+          labelCol={{ span: 18 }}
+          wrapperCol={{ span: 20, offset: 1 }}
           form={form}
-          layout="horizontal"
+          layout="vertical"
           fields={[
-            { name: ["mssv"], value: formState.mssv },
-            { name: ["name"], value: formState.name },
-            { name: ["email"], value: formState.email },
-            { name: ["role"], value: formState.role },
-            { name: ["status"], value: formState.status },
-            { name: ["password"], value: formState.password },
+            { name: ["title"], value: formState.title },
+            { name: ["description"], value: formState.description },
+            { name: ["nameOfdocs"], value: formState.nameOfdocs },
+            { name: ["linkOfdocs"], value: formState.linkOfdocs },
+            { name: ["creator"], value: formState.creator },
           ]}
         >
-          <Form.Item<IUser>
-            label="MSSV"
-            name="mssv"
+          <Form.Item<ISubject>
+            label="Tên môn học"
+            name="title"
             rules={[{ required: true, message: "Please input your username!" }]}
           >
             <Input
               onChange={(e) => {
-                setFormState({ ...formState, mssv: e.target.value });
+                setFormState({ ...formState, title: e.target.value });
               }}
             />
           </Form.Item>
 
-          <Form.Item<IUser>
-            label="Họ và tên"
-            name="name"
+          <Form.Item<ISubject>
+            label="Mô tả"
+            name="description"
             rules={[{ required: true, message: "Please input your username!" }]}
           >
             <Input
               onChange={(e) => {
-                setFormState({ ...formState, name: e.target.value });
+                setFormState({ ...formState, description: e.target.value });
               }}
             />
           </Form.Item>
 
-          <Form.Item<IUser>
-            label="Email"
-            name="email"
+          <Form.Item<ISubject>
+            label="Tên tài liệu (mỗi tài liệu cách nhau bởi dấu ,)"
+            name="nameOfdocs"
+            rules={[{ required: true, message: "Hãy nhập tên tài liệu" }]}
+          >
+            <TextArea
+              rows={4}
+              onChange={(e) => {
+                setFormState({
+                  ...formState,
+                  nameOfdocs: e.target.value.split(","),
+                });
+              }}
+            />
+          </Form.Item>
+
+          <Form.Item<ISubject>
+            label="Link tài liệu (mỗi tài liệu cách nhau bởi dấu ,)"
+            name="linkOfdocs"
+            rules={[{ required: true, message: "Hãy nhập link tài liệu" }]}
+          >
+            <TextArea
+              rows={4}
+              onChange={(e) => {
+                setFormState({
+                  ...formState,
+                  linkOfdocs: e.target.value.split(","),
+                });
+              }}
+            />
+          </Form.Item>
+
+          <Form.Item<ISubject>
+            label="Người tạo"
+            name="creator"
             rules={[{ required: true, message: "Please input your username!" }]}
           >
             <Input
               onChange={(e) => {
-                setFormState({ ...formState, email: e.target.value });
+                setFormState({ ...formState, creator: e.target.value });
               }}
             />
           </Form.Item>
-
-          <Form.Item<IUser>
-            label="Role"
-            name="role"
-            rules={[{ required: true, message: "Please input your username!" }]}
-          >
-            <Select
-              onChange={(value) => {
-                setFormState({ ...formState, role: value });
-              }}
-            >
-              <Select.Option value="admin">Admin</Select.Option>
-              <Select.Option value="user">User</Select.Option>
-            </Select>
-          </Form.Item>
-
-          <Form.Item<IUser>
-            label="Status"
-            name="status"
-            rules={[{ required: true, message: "Please input your username!" }]}
-          >
-            <Select
-              onChange={(value) => {
-                setFormState({ ...formState, status: value });
-              }}
-            >
-              <Select.Option value="active">Active</Select.Option>
-              <Select.Option value="inactive">Inactive</Select.Option>
-            </Select>
-          </Form.Item>
-
-          {!isEdit && (
-            <Form.Item<IUser>
-              label="Password"
-              name="password"
-              rules={[
-                { required: true, message: "Please input your password!" },
-              ]}
-            >
-              <Password
-                onChange={(e) => {
-                  setFormState({ ...formState, password: e.target.value });
-                }}
-              />
-            </Form.Item>
-          )}
         </Form>
       )}
     </Modal>

@@ -2,11 +2,10 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Button, Flex, Popconfirm, Skeleton, Space } from "antd";
 import Table, { ColumnsType } from "antd/es/table";
 import { Fragment, useState } from "react";
-import { getAllModels } from "src/api/Model.api";
-import { deleteUser } from "src/api/User.api";
+import { deleteSubject, getAllSubjects } from "src/api/Subject.api";
 import { showNotification } from "src/components/Notification/Notification";
 import Text from "src/components/Text";
-import { IUser } from "src/types/User.type";
+import { ISubject } from "src/types/Subject.type";
 import AddAsset from "./AddSubjectDashboard";
 
 // user value column of antd table
@@ -15,10 +14,10 @@ const columns = function (
   isDelete: boolean,
   callbackEdit: (id: string) => void,
   callbackDelete: (id: string) => void
-): ColumnsType<IUser> {
-  const columnTitle: ColumnsType<IUser> = [
+): ColumnsType<ISubject> {
+  const columnTitle: ColumnsType<ISubject> = [
     {
-      title: "Tên mô hình",
+      title: "Tên môn học",
       dataIndex: "title",
       key: "title",
     },
@@ -28,25 +27,37 @@ const columns = function (
       key: "description",
     },
     {
-      title: "Loại mô hình",
-      dataIndex: "modelType",
-      key: "modelType",
+      title: "Tên tài liệu",
+      dataIndex: "nameOfdocs",
+      key: "nameOfdocs",
+      render: (_: string, record: ISubject) => (
+        // let every item break line
+        <Text>
+          {record.nameOfdocs.map((item, index) => (
+            <p key={index}>{item}</p>
+          ))}
+        </Text>
+      ),
     },
     {
-      title: "Ngày bảo dưỡng",
-      dataIndex: "maintainTime",
-      key: "maintainTime",
-    },
-    {
-      title: "Ảnh mô hình",
-      key: "photo",
+      title: "Link tài liệu",
+      dataIndex: "linkOfdocs",
+      key: "linkOfdocs",
+      render: (_: string, record: ISubject) => (
+        // let every item break line
+        <Text>
+          {record.linkOfdocs.map((item, index) => (
+            <p key={index}>{item}</p>
+          ))}
+        </Text>
+      ),
     },
     {
       title: "Thao tác",
       key: "action",
       align: "center",
       width: 100,
-      render: (_: string, record: IUser) => (
+      render: (_: string, record: ISubject) => (
         <Space size="small">
           {isUpdate && (
             <Button type="link" onClick={() => callbackEdit(record._id)}>
@@ -55,7 +66,7 @@ const columns = function (
           )}
           {isDelete && (
             <Popconfirm
-              title={"Bạn có chắc chắn muốn xoá mô hình này không?"}
+              title={"Bạn có chắc chắn muốn xoá môn học này không?"}
               okButtonProps={{ className: "bg-soft" }}
             >
               <Button
@@ -86,27 +97,27 @@ export default function SubjectDashboard() {
 
   const [open, setOpen] = useState<OpenType>({ isOpen: false });
 
-  const deleteUserMutation = useMutation({
-    mutationFn: (id: string) => deleteUser(id),
+  const deleteSubjectMutation = useMutation({
+    mutationFn: (id: string) => deleteSubject(id),
 
     onError: (error) => {
       showNotification(error, "error");
     },
     onSuccess: () => {
-      showNotification("Xoá mô hình thành công", "success");
+      showNotification("Xoá môn học thành công", "success");
     },
   });
 
-  const modelQuery = useQuery({
-    queryKey: ["modelsTable"],
-    queryFn: () => getAllModels(page, pageSize),
+  const subjectsQuery = useQuery({
+    queryKey: ["subjectsTable"],
+    queryFn: () => getAllSubjects(page, pageSize),
     staleTime: 60 * 1000,
   });
 
   const handleDelete = (id: string) => {
-    deleteUserMutation.mutate(id, {
+    deleteSubjectMutation.mutate(id, {
       onSuccess: () => {
-        modelQuery.refetch();
+        subjectsQuery.refetch();
       },
     });
   };
@@ -125,7 +136,7 @@ export default function SubjectDashboard() {
     <Fragment>
       <div className="p-4 sm:ml-64">
         <Text size="lg" className="font-bold">
-          Mô hình
+          Môn học
         </Text>
         <Flex className="mt-4">
           <Button
@@ -133,21 +144,22 @@ export default function SubjectDashboard() {
             className="bg-soft"
             type="primary"
           >
-            Thêm mô hình
+            Thêm môn học
           </Button>
         </Flex>
-        {modelQuery.isLoading ? (
+        {subjectsQuery.isLoading ? (
           <Skeleton active />
         ) : (
           <Table
             className="mt-4"
             columns={columns(true, true, handleEdit, handleDelete)}
-            dataSource={modelQuery.data?.data}
-            loading={modelQuery.isLoading}
+            dataSource={subjectsQuery.data?.data}
+            loading={subjectsQuery.isLoading}
+            scroll={{ x: "max-content" }}
             pagination={{
               current: page,
               pageSize,
-              total: modelQuery.data?.total_pages,
+              total: subjectsQuery.data?.total_pages,
               onChange: (page) => {
                 setPage(page);
               },
