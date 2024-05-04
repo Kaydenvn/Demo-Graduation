@@ -89,14 +89,20 @@ export default function Header() {
             </Link>
           </li>
           <li>
-            <a className="text-white btn bg-transparent border-none hover:text-primary">
+            <Link
+              to="/news"
+              className="text-white btn bg-transparent border-none hover:text-primary"
+            >
               Tin Tức
-            </a>
+            </Link>
           </li>
           <li>
-            <a className="text-white btn bg-transparent border-none hover:text-primary">
+            <Link
+              to="https://fte.hcmut.edu.vn/chuyen-muc/lich-cong-tac"
+              className="text-white btn bg-transparent border-none hover:text-primary"
+            >
               Liên Hệ
-            </a>
+            </Link>
           </li>
         </ul>
       </div>

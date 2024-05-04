@@ -25,23 +25,30 @@ export const addSubject = async (data: ISubject) => {
     nameOfdocs: data.nameOfdocs,
     linkOfdocs: data.linkOfdocs,
     creator: data.creator,
+    photo: data.photo,
   });
   return response.data;
 };
 
 export const updateSubject = async (data: ISubject) => {
-  const response = await http.put(`${controller}`, {
+  const response = await http.put(`${controller}/${data._id}`, {
     _id: data._id,
     title: data.title,
     description: data.description,
     nameOfdocs: data.nameOfdocs,
     linkOfdocs: data.linkOfdocs,
     creator: data.creator,
+    photo: data.photo,
   });
   return response.data;
 };
 
 export const deleteSubject = async (id: string) => {
   const response = await http.delete(`${controller}/${id}`);
+  return response.data;
+};
+
+export const getSubjectForThumbnail = async () => {
+  const response = await http.get(`${controller}/thumbnail`);
   return response.data;
 };

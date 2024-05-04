@@ -49,7 +49,7 @@ export default function AddModelDashboard({
       setFormState(initialFormState);
     },
     onSuccess: () => {
-      showNotification("Thêm người dùng thành công", "success");
+      showNotification("Thêm môn học thành công", "success");
       setConfirmLoading(false);
     },
   });
@@ -67,7 +67,7 @@ export default function AddModelDashboard({
       setFormState(initialFormState);
     },
     onSuccess: () => {
-      showNotification("Cập nhật người dùng thành công", "success");
+      showNotification("Cập nhật môn học thành công", "success");
       setConfirmLoading(false);
     },
   });
@@ -108,7 +108,6 @@ export default function AddModelDashboard({
           updateModelMutation.mutate(formState, {
             onSuccess: () => {
               handleInvalidate();
-              showNotification("Cập nhật người dùng thành công", "success");
               setFormState(initialFormState);
               setConfirmLoading(false);
               setOpen({ isOpen: false });
@@ -118,7 +117,6 @@ export default function AddModelDashboard({
           addModelMutation.mutate(formState, {
             onSuccess: () => {
               handleInvalidate();
-              showNotification("Thêm người dùng thành công", "success");
               setFormState(initialFormState);
               setConfirmLoading(false);
               setOpen({ isOpen: false });

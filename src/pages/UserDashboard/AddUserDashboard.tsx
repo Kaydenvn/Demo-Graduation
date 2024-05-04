@@ -103,7 +103,6 @@ export default function AddUserDashboard({
           updateUserMutation.mutate(formState, {
             onSuccess: () => {
               handleInvalidate();
-              showNotification("Cập nhật người dùng thành công", "success");
               setFormState(initialFormState);
               setConfirmLoading(false);
               setOpen({ isOpen: false });
@@ -113,7 +112,6 @@ export default function AddUserDashboard({
           addUserMutation.mutate(formState, {
             onSuccess: () => {
               handleInvalidate();
-              showNotification("Thêm người dùng thành công", "success");
               setFormState(initialFormState);
               setConfirmLoading(false);
               setOpen({ isOpen: false });

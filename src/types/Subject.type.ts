@@ -5,4 +5,5 @@ export interface ISubject {
   nameOfdocs: string[];
   linkOfdocs: string[];
   creator: string;
+  photo: string;
 }

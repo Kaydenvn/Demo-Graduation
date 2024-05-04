@@ -4,11 +4,11 @@ import React, { useEffect, useState } from "react";
 import { OpenType } from "./SubjectDashboard";
 
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { addSubject, updateSubject } from "src/api/Subject.api";
-import { getUserById } from "src/api/User.api";
+import TextArea from "antd/es/input/TextArea";
+import { addSubject, getSubjectById, updateSubject } from "src/api/Subject.api";
 import { showNotification } from "src/components/Notification/Notification";
 import { ISubject } from "src/types/Subject.type";
-import TextArea from "antd/es/input/TextArea";
+import useAuth from "src/hooks/useAuth";
 
 interface Props {
   open: OpenType;
@@ -23,6 +23,7 @@ const initialFormState: ISubject = {
   nameOfdocs: [],
   linkOfdocs: [],
   creator: "",
+  photo: "",
 };
 
 export default function AddSubjectDashboard({
@@ -33,6 +34,7 @@ export default function AddSubjectDashboard({
   const [form] = useForm();
   const [formState, setFormState] = useState<ISubject>(initialFormState);
   const [confirmLoading, setConfirmLoading] = useState(false);
+  const { user } = useAuth();
 
   const addSubjectMutation = useMutation({
     mutationFn: (data: ISubject) => addSubject(data),
@@ -68,24 +70,32 @@ export default function AddSubjectDashboard({
     },
   });
 
-  const userbyIdQuery = useQuery({
-    queryKey: ["userById", open.id],
+  const subjectbyIdQuery = useQuery({
+    queryKey: ["subjectById", open.id],
     queryFn: () => {
       if (open.id) {
-        return getUserById(open.id);
+        return getSubjectById(open.id);
       }
     },
     enabled: !!open.id,
   });
   useEffect(() => {
-    if (userbyIdQuery.isSuccess) {
-      const editUser = {
-        ...userbyIdQuery.data,
-        password: "",
-      };
-      setFormState(editUser);
+    if (user) {
+      setFormState({ ...formState, creator: user._id });
     }
-  }, [userbyIdQuery.data, userbyIdQuery.isSuccess]);
+    if (subjectbyIdQuery.isSuccess) {
+      setFormState({
+        ...formState,
+        title: subjectbyIdQuery.data.title,
+        description: subjectbyIdQuery.data.description,
+        nameOfdocs: subjectbyIdQuery.data.nameOfdocs,
+        linkOfdocs: subjectbyIdQuery.data.linkOfdocs,
+        creator: subjectbyIdQuery.data.creator,
+        photo: subjectbyIdQuery.data.photo,
+        _id: subjectbyIdQuery.data._id,
+      });
+    }
+  }, [subjectbyIdQuery.data, subjectbyIdQuery.isSuccess, open]);
 
   const handleCancelModal = () => {
     setOpen({ isOpen: false });
@@ -102,7 +112,6 @@ export default function AddSubjectDashboard({
           updateSubjectMutation.mutate(formState, {
             onSuccess: () => {
               handleInvalidate();
-              showNotification("Cập nhật người dùng thành công", "success");
               setFormState(initialFormState);
               setConfirmLoading(false);
               setOpen({ isOpen: false });
@@ -112,7 +121,6 @@ export default function AddSubjectDashboard({
           addSubjectMutation.mutate(formState, {
             onSuccess: () => {
               handleInvalidate();
-              showNotification("Thêm người dùng thành công", "success");
               setFormState(initialFormState);
               setConfirmLoading(false);
               setOpen({ isOpen: false });
@@ -149,12 +157,12 @@ export default function AddSubjectDashboard({
         </Button>,
       ]}
     >
-      {userbyIdQuery.isFetching && isEdit ? (
+      {subjectbyIdQuery.isFetching && isEdit ? (
         <Skeleton active paragraph={{ rows: 6 }} />
       ) : (
         <Form
-          labelCol={{ span: 18 }}
-          wrapperCol={{ span: 20, offset: 1 }}
+          labelCol={{ span: 22 }}
+          wrapperCol={{ span: 22, offset: 1 }}
           form={form}
           layout="vertical"
           fields={[
@@ -163,6 +171,7 @@ export default function AddSubjectDashboard({
             { name: ["nameOfdocs"], value: formState.nameOfdocs },
             { name: ["linkOfdocs"], value: formState.linkOfdocs },
             { name: ["creator"], value: formState.creator },
+            { name: ["photo"], value: formState.photo },
           ]}
         >
           <Form.Item<ISubject>
@@ -190,7 +199,7 @@ export default function AddSubjectDashboard({
           </Form.Item>
 
           <Form.Item<ISubject>
-            label="Tên tài liệu (mỗi tài liệu cách nhau bởi dấu ,)"
+            label="Tên tài liệu (mỗi tài liệu xuống dòng, thêm dấu phẩy ở cuối)"
             name="nameOfdocs"
             rules={[{ required: true, message: "Hãy nhập tên tài liệu" }]}
           >
@@ -206,7 +215,7 @@ export default function AddSubjectDashboard({
           </Form.Item>
 
           <Form.Item<ISubject>
-            label="Link tài liệu (mỗi tài liệu cách nhau bởi dấu ,)"
+            label="Link tài liệu (mỗi tài liệu xuống dòng, thêm dấu phẩy ở cuối)"
             name="linkOfdocs"
             rules={[{ required: true, message: "Hãy nhập link tài liệu" }]}
           >
@@ -224,11 +233,22 @@ export default function AddSubjectDashboard({
           <Form.Item<ISubject>
             label="Người tạo"
             name="creator"
-            rules={[{ required: true, message: "Please input your username!" }]}
+            rules={[{ required: true, message: "Please input your creator!" }]}
           >
             <Input
               onChange={(e) => {
                 setFormState({ ...formState, creator: e.target.value });
+              }}
+            />
+          </Form.Item>
+          <Form.Item<ISubject>
+            label="Ảnh môn học (Link)"
+            name="photo"
+            rules={[{ required: true, message: "Please input your photo!" }]}
+          >
+            <Input
+              onChange={(e) => {
+                setFormState({ ...formState, photo: e.target.value });
               }}
             />
           </Form.Item>

@@ -25,6 +25,7 @@ const columns = function (
       title: "Mô tả",
       dataIndex: "description",
       key: "description",
+      width: "30%",
     },
     {
       title: "Tên tài liệu",
@@ -51,6 +52,11 @@ const columns = function (
           ))}
         </Text>
       ),
+    },
+    {
+      title: "Photo",
+      dataIndex: "photo",
+      key: "photo",
     },
     {
       title: "Thao tác",
@@ -128,7 +134,7 @@ export default function SubjectDashboard() {
 
   const handleInvalidate = () => {
     clientQuery.invalidateQueries({
-      queryKey: ["modelsTable"],
+      queryKey: ["subjectsTable"],
     });
   };
 
