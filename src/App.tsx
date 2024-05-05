@@ -25,8 +25,8 @@ function App() {
         <Route path="/" element={<Mainlayout />}>
           <Route element={<RequireAuth />}>
             <Route path="/" element={<Home />} />
-            <Route path="/products" element={<Products />} />
-            <Route path="/subject" element={<Subject />} />
+            <Route path="/models/:id" element={<Products />} />
+            <Route path="/subjects/:id" element={<Subject />} />
             <Route path="/introduction" element={<Introduction />} />
           </Route>
         </Route>

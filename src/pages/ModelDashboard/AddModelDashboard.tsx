@@ -169,7 +169,7 @@ export default function AddModelDashboard({
               name: ["maintainTime"],
               value: dayjs(formState.maintainTime),
             },
-            { name: ["photo"], value: formState.photo.map((item) => item) },
+            { name: ["photo"], value: formState.photo },
             {
               name: ["startDate"],
               value: dayjs(formState.startDate),
@@ -254,7 +254,6 @@ export default function AddModelDashboard({
               onChange={(e) => {
                 setFormState({
                   ...formState,
-                  // return array of photo
                   photo: e.target.value.split(","),
                 });
               }}

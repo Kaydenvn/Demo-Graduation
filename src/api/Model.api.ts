@@ -40,3 +40,8 @@ export const deleteModel = async (id: string) => {
   const response = await http.delete(`${controller}/${id}`);
   return response.data;
 };
+
+export const getModelForThumbnail = async () => {
+  const response = await http.get(`${controller}/thumbnail`);
+  return response.data;
+};

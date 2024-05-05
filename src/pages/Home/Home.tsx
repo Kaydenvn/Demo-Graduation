@@ -7,11 +7,11 @@ export default function Home() {
   return (
     <div>
       <Hero />
-      <CardList />
+      <ListSubject />
       <section className="">
         <div className="container divider mx-auto"></div>
       </section>
-      <ListSubject />
+      <CardList />
       <Team />
     </div>
   );

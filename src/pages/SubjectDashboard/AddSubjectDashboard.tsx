@@ -7,8 +7,8 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import TextArea from "antd/es/input/TextArea";
 import { addSubject, getSubjectById, updateSubject } from "src/api/Subject.api";
 import { showNotification } from "src/components/Notification/Notification";
-import { ISubject } from "src/types/Subject.type";
 import useAuth from "src/hooks/useAuth";
+import { ISubject } from "src/types/Subject.type";
 
 interface Props {
   open: OpenType;
@@ -16,25 +16,24 @@ interface Props {
   handleInvalidate: () => void;
 }
 
-const initialFormState: ISubject = {
-  _id: "",
-  title: "",
-  description: "",
-  nameOfdocs: [],
-  linkOfdocs: [],
-  creator: "",
-  photo: "",
-};
-
 export default function AddSubjectDashboard({
   open,
   setOpen,
   handleInvalidate,
 }: Props) {
-  const [form] = useForm();
-  const [formState, setFormState] = useState<ISubject>(initialFormState);
-  const [confirmLoading, setConfirmLoading] = useState(false);
   const { user } = useAuth();
+  const initialFormState: ISubject = {
+    _id: "",
+    title: "",
+    description: "",
+    nameOfdocs: [],
+    linkOfdocs: [],
+    creator: user?._id || "",
+    photo: "",
+  };
+  const [form] = useForm();
+  const [confirmLoading, setConfirmLoading] = useState(false);
+  const [formState, setFormState] = useState<ISubject>(initialFormState);
 
   const addSubjectMutation = useMutation({
     mutationFn: (data: ISubject) => addSubject(data),
@@ -80,22 +79,10 @@ export default function AddSubjectDashboard({
     enabled: !!open.id,
   });
   useEffect(() => {
-    if (user) {
-      setFormState({ ...formState, creator: user._id });
-    }
     if (subjectbyIdQuery.isSuccess) {
-      setFormState({
-        ...formState,
-        title: subjectbyIdQuery.data.title,
-        description: subjectbyIdQuery.data.description,
-        nameOfdocs: subjectbyIdQuery.data.nameOfdocs,
-        linkOfdocs: subjectbyIdQuery.data.linkOfdocs,
-        creator: subjectbyIdQuery.data.creator,
-        photo: subjectbyIdQuery.data.photo,
-        _id: subjectbyIdQuery.data._id,
-      });
+      setFormState(subjectbyIdQuery.data);
     }
-  }, [subjectbyIdQuery.data, subjectbyIdQuery.isSuccess, open]);
+  }, [subjectbyIdQuery.data, subjectbyIdQuery.isSuccess]);
 
   const handleCancelModal = () => {
     setOpen({ isOpen: false });

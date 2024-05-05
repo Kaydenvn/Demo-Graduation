@@ -1,5 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { Button, Flex, Popconfirm, Skeleton, Space } from "antd";
+import { Button, Flex, Image, Popconfirm, Skeleton, Space } from "antd";
 import Table, { ColumnsType } from "antd/es/table";
 import { Fragment, useState } from "react";
 import { deleteModel, getAllModels } from "src/api/Model.api";
@@ -50,6 +50,13 @@ const columns = function (
       title: "Ảnh mô hình",
       key: "photo",
       dataIndex: "photo",
+      render: (_: string, record: IModel) => (
+        <Image.PreviewGroup>
+          {record.photo.map((item, index) => (
+            <Image key={index} width={50} src={item} alt="Ảnh mô hình" />
+          ))}
+        </Image.PreviewGroup>
+      ),
     },
     {
       title: "Thao tác",
@@ -67,12 +74,9 @@ const columns = function (
             <Popconfirm
               title={"Bạn có chắc chắn muốn xoá mô hình này không?"}
               okButtonProps={{ className: "bg-soft" }}
+              onConfirm={() => callbackDelete(record._id)}
             >
-              <Button
-                type="link"
-                danger
-                onClick={() => callbackDelete(record._id)}
-              >
+              <Button type="link" danger>
                 Xoá
               </Button>
             </Popconfirm>
