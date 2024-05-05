@@ -25,7 +25,7 @@ export default function Avatar() {
     setIsAuthenticated(false);
     setUser({
       email: "",
-      id: "",
+      _id: "",
       name: "",
       role: "",
       status: "",
