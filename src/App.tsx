@@ -7,7 +7,7 @@ const Mainlayout = React.lazy(() => import("./layouts/MainLayout"));
 const DashboardLayout = React.lazy(() => import("./layouts/DashboardLayout"));
 const Home = React.lazy(() => import("./pages/Home"));
 const Login = React.lazy(() => import("./pages/Login"));
-const Products = React.lazy(() => import("./pages/Products"));
+const Model = React.lazy(() => import("./pages/Model"));
 const Subject = React.lazy(() => import("./pages/Subject"));
 const Introduction = React.lazy(() => import("./pages/Introduction"));
 const Dashboard = React.lazy(() => import("./pages/Dashboard"));
@@ -25,7 +25,7 @@ function App() {
         <Route path="/" element={<Mainlayout />}>
           <Route element={<RequireAuth />}>
             <Route path="/" element={<Home />} />
-            <Route path="/models/:id" element={<Products />} />
+            <Route path="/models/:id" element={<Model />} />
             <Route path="/subjects/:id" element={<Subject />} />
             <Route path="/introduction" element={<Introduction />} />
           </Route>

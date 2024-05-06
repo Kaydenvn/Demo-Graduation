@@ -35,7 +35,7 @@ export default function CardCarousel({ data, type }: Props) {
             <Link to={`/${type}/${item.key}`}>
               <img
                 alt="Placeholder"
-                className="block h-auto w-96"
+                className="block object-cover h-56 w-full"
                 src={item.photo}
               />
             </Link>

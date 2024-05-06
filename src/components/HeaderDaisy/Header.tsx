@@ -104,6 +104,14 @@ export default function Header() {
               Liên Hệ
             </Link>
           </li>
+          <li>
+            <Link
+              to="confirm-data"
+              className="text-white btn bg-transparent border-none hover:text-primary"
+            >
+              Nộp số liệu
+            </Link>
+          </li>
         </ul>
       </div>
       <div className="navbar-end">

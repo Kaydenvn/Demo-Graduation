@@ -55,7 +55,7 @@ export default function Subject() {
     <section className="text-gray-600 body-font">
       <div className="container px-5 py-10 mx-auto flex flex-col">
         <div className="lg:w-4/6 mx-auto">
-          <div className="rounded-lg min-h-16 max-h-96 overflow-hidden">
+          <div className="rounded-lg min-h-16  overflow-hidden">
             <img
               alt="content"
               className="object-fit w-full h-full"
