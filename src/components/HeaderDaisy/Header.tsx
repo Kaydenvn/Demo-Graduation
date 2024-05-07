@@ -106,10 +106,10 @@ export default function Header() {
           </li>
           <li>
             <Link
-              to="confirm-data"
+              to="rules"
               className="text-white btn bg-transparent border-none hover:text-primary"
             >
-              Nộp số liệu
+              Nội quy
             </Link>
           </li>
         </ul>
