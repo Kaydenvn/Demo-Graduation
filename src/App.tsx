@@ -15,6 +15,8 @@ const PersistantLogin = React.lazy(() => import("./pages/PersistantLogin"));
 const UserDashboard = React.lazy(() => import("./pages/UserDashboard"));
 const ModelDashboard = React.lazy(() => import("./pages/ModelDashboard"));
 const SubjectDashboard = React.lazy(() => import("./pages/SubjectDashboard"));
+const AllModel = React.lazy(() => import("./pages/AllModel"));
+const AllSubject = React.lazy(() => import("./pages/AllSubject"));
 
 function App() {
   return (
@@ -25,7 +27,9 @@ function App() {
         <Route path="/" element={<Mainlayout />}>
           <Route element={<RequireAuth />}>
             <Route path="/" element={<Home />} />
+            <Route path="/models" element={<AllModel />} />
             <Route path="/models/:id" element={<Model />} />
+            <Route path="/subjects" element={<AllSubject />} />
             <Route path="/subjects/:id" element={<Subject />} />
             <Route path="/introduction" element={<Introduction />} />
           </Route>

@@ -1,4 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
+import { Link } from "react-router-dom";
 import { getModelForThumbnail } from "src/api/Model.api";
 import CardCarousel from "src/components/CardCarousel";
 
@@ -10,7 +11,12 @@ const CardList = () => {
 
   return (
     <div className="container mt-12 my-2 mx-auto ">
-      <div className="text-2xl font-medium mb-8 px-2">Các Mô hình</div>
+      <div className="flex justify-between items-center ">
+        <div className="text-2xl font-medium mb-8 px-2">Các Mô Hình</div>
+        <Link to="/models" className="text-soft">
+          Xem toàn bộ
+        </Link>
+      </div>
       <p className="text-lg text-gray-600 mb-2 px-2">
         Thông tin về các mô hình trong xưởng c3
       </p>
