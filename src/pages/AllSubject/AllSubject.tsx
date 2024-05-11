@@ -19,15 +19,15 @@ export default function AllSubject() {
 
   return (
     <Fragment>
-      <div className="container">
-        <div className="py-6 px-16">
+      <div className="">
+        <div className="py-6 px-10">
           <Text size="xxl" className="font-bold">
             Tất cả môn học
           </Text>
           <Flex wrap="wrap" gap="large" className="mt-2">
             {subjectQuery.isSuccess &&
               subjectQuery.data?.data.map((item: Data) => (
-                <Card hoverable>
+                <Card hoverable className="max-w-[26rem]">
                   <article className="overflow-hidden rounded-lg shadow-lg">
                     <Link to={`/subjects/${item.key}`}>
                       <img
@@ -38,12 +38,12 @@ export default function AllSubject() {
                     </Link>
                     <header className="flex items-center justify-between leading-tight p-2 md:p-4">
                       <h1 className="text-lg">
-                        <a
+                        <Link
                           className="no-underline hover:underline text-black"
-                          href="#"
+                          to={`/subjects/${item.key}`}
                         >
                           {item.title}
-                        </a>
+                        </Link>
                       </h1>
                     </header>
                   </article>

@@ -2,6 +2,7 @@ import React from "react";
 import { Routes, Route } from "react-router-dom";
 import "./App.css";
 import RequireAuth from "./utils/RequireAuth";
+import ScrollToTop from "./utils/ScrollToTop";
 
 const Mainlayout = React.lazy(() => import("./layouts/MainLayout"));
 const DashboardLayout = React.lazy(() => import("./layouts/DashboardLayout"));
@@ -21,6 +22,7 @@ const AllSubject = React.lazy(() => import("./pages/AllSubject"));
 function App() {
   return (
     <Routes>
+      <Route element={<ScrollToTop />} />
       <Route path="/login" element={<Login />} />
 
       <Route element={<PersistantLogin />}>

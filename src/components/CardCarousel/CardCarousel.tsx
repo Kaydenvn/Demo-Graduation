@@ -41,9 +41,12 @@ export default function CardCarousel({ data, type }: Props) {
             </Link>
             <header className="flex items-center justify-between leading-tight p-2 md:p-4">
               <h1 className="text-lg">
-                <a className="no-underline hover:underline text-black" href="#">
+                <Link
+                  className="no-underline hover:underline text-black"
+                  to={`/${type}/${item.key}`}
+                >
                   {item.title}
-                </a>
+                </Link>
               </h1>
             </header>
           </article>
