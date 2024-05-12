@@ -4,6 +4,7 @@ import { Fragment } from "react";
 import { Link } from "react-router-dom";
 import { getModelForThumbnail } from "src/api/Model.api";
 import Text from "src/components/Text";
+import Loading from "../Loading";
 
 interface Data {
   key: string;
@@ -18,7 +19,9 @@ export default function AllModel() {
   });
   return (
     <Fragment>
-      <div className="">
+      {modelQuery.isLoading ? (
+        <Loading />
+      ) : (
         <div className="py-6 px-10">
           <Text size="xxl" className="font-bold">
             Tất cả mô hình
@@ -50,7 +53,7 @@ export default function AllModel() {
               ))}
           </Flex>
         </div>
-      </div>
+      )}
     </Fragment>
   );
 }

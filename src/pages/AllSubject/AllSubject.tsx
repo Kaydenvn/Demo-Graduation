@@ -4,6 +4,7 @@ import React, { Fragment } from "react";
 import { Link } from "react-router-dom";
 import { getSubjectForThumbnail } from "src/api/Subject.api";
 import Text from "src/components/Text";
+import Loading from "../Loading";
 
 interface Data {
   key: string;
@@ -19,7 +20,9 @@ export default function AllSubject() {
 
   return (
     <Fragment>
-      <div className="">
+      {subjectQuery.isLoading ? (
+        <Loading />
+      ) : (
         <div className="py-6 px-10">
           <Text size="xxl" className="font-bold">
             Tất cả môn học
@@ -51,7 +54,7 @@ export default function AllSubject() {
               ))}
           </Flex>
         </div>
-      </div>
+      )}
     </Fragment>
   );
 }
