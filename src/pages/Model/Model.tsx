@@ -36,7 +36,7 @@ export default function Model() {
       <div className="container px-5 py-10 mx-auto mb-24">
         <div className="lg:w-4/5 mx-auto flex flex-wrap">
           <div className="lg:w-1/2 w-full lg:h-auto h-64 object-cover object-center rounded">
-            <img
+            <Image
               alt="ecommerce"
               className="w-full h-full aspect-square object-cover rounded-xl"
               src={activeImg}
@@ -45,7 +45,7 @@ export default function Model() {
               {/* if images length = 1 dont show  */}
               {images.length > 1
                 ? images.map((img: string, index: number) => (
-                    <Image
+                    <img
                       key={index}
                       alt="ecommerce"
                       className="w-24 h-24 aspect-square object-cover rounded-xl cursor-pointer"
