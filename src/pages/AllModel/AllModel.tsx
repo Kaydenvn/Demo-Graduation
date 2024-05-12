@@ -21,7 +21,7 @@ export default function AllModel() {
       <div className="">
         <div className="py-6 px-10">
           <Text size="xxl" className="font-bold">
-            Tất cả môn học
+            Tất cả mô hình
           </Text>
           <Flex wrap="wrap" gap="large" className="mt-2">
             {modelQuery.isSuccess &&
