@@ -106,7 +106,7 @@ export default function Header() {
           </li>
           <li>
             <Link
-              to="rules"
+              to="/rules"
               className="text-white btn bg-transparent border-none hover:text-primary"
             >
               Nội quy

@@ -25,7 +25,7 @@ const columns = function (
       title: "Mô tả",
       dataIndex: "description",
       key: "description",
-      width: "30%",
+      width: "20%",
     },
     {
       title: "Tên tài liệu",
@@ -57,6 +57,7 @@ const columns = function (
       title: "Photo",
       dataIndex: "photo",
       key: "photo",
+      width: "10%",
     },
     {
       title: "Thao tác",
@@ -161,7 +162,7 @@ export default function SubjectDashboard() {
             columns={columns(true, true, handleEdit, handleDelete)}
             dataSource={subjectsQuery.data?.data}
             loading={subjectsQuery.isLoading}
-            scroll={{ x: "max-content" }}
+            scroll={{ x: "2000px" }}
             pagination={{
               current: page,
               pageSize,
