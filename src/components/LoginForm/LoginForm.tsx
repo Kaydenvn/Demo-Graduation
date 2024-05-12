@@ -59,9 +59,12 @@ export default function LoginForm() {
           Đăng Nhập
         </h2>
         <p className="text-center text-sm text-gray-600 mt-5">
-          Bạn không có tài khoản? Hãy liên hệ{" "}
-          <Link to="#" className="font-medium text-soft hover:opacity-80">
-            quản trị viên
+          Bạn không có tài khoản? Hãy{" "}
+          <Link
+            to="https://forms.gle/rr6XwNQEbHzo96PXA"
+            className="font-medium text-soft hover:opacity-80"
+          >
+            làm bài test
           </Link>
         </p>
       </div>

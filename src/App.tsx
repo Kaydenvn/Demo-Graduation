@@ -19,6 +19,7 @@ const SubjectDashboard = React.lazy(() => import("./pages/SubjectDashboard"));
 const AllModel = React.lazy(() => import("./pages/AllModel"));
 const AllSubject = React.lazy(() => import("./pages/AllSubject"));
 const Rules = React.lazy(() => import("./pages/Rules"));
+const News = React.lazy(() => import("./pages/News"));
 
 function App() {
   return (
@@ -36,6 +37,7 @@ function App() {
             <Route path="/subjects/:id" element={<Subject />} />
             <Route path="/introduction" element={<Introduction />} />
             <Route path="/rules" element={<Rules />} />
+            <Route path="/news" element={<News />} />
           </Route>
         </Route>
         <Route element={<DashboardLayout />}>

@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
-import { Image } from "antd";
-import React, { Fragment, useEffect, useState } from "react";
+import { Button, Flex, Image, Input } from "antd";
+import { Fragment, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { getModelById } from "src/api/Model.api";
 import ScrollToTop from "src/utils/ScrollToTop";
@@ -9,6 +9,9 @@ import Loading from "../Loading";
 export default function Model() {
   ScrollToTop();
   const { id } = useParams();
+  const [no, setNo] = useState(0);
+  const [nt, setNt] = useState(0);
+  const [result, setResult] = useState(0);
 
   const modelQueryById = useQuery({
     queryKey: [`modelby${id}`],
@@ -71,6 +74,46 @@ export default function Model() {
 
                 <p className="leading-relaxed">
                   {modelQueryById.data?.description}
+                </p>
+                <p className="mt-10 font-bold">
+                  Bộ công cụ tính xác xuất hư hỏng
+                </p>
+                <p>Trong đó:</p>
+                <Flex gap={24}>
+                  <p>nt: số phần tử không hư hỏng</p>
+                  <p>no: số phần tử có trong hệ thống</p>
+                </Flex>
+                <p className="mt-6">Bảng tính:</p>
+                <Flex gap={24} className="mt-1">
+                  <Input
+                    className="w-1/2"
+                    placeholder="Số phần tử không hư hỏng"
+                    onChange={(e) => {
+                      setNt(Number(e.target.value));
+                    }}
+                  />
+                  <Input
+                    className="w-1/2"
+                    placeholder="Số phần tử có trong hệ thống"
+                    onChange={(e) => {
+                      setNo(Number(e.target.value));
+                    }}
+                  />
+                </Flex>
+                <Button
+                  className="mt-2"
+                  onClick={() => {
+                    if (nt === 0 || no === 0) {
+                      return;
+                    }
+                    setResult(((no - nt) / no) * 100);
+                  }}
+                  type="primary"
+                >
+                  Thực hiện phép tính
+                </Button>
+                <p className="mt-2">
+                  Kết quả: {result != 0 ? result + "%" : ""}
                 </p>
               </div>
             </div>
