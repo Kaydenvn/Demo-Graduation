@@ -1,4 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
+import { Image } from "antd";
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { getModelById } from "src/api/Model.api";
@@ -44,7 +45,7 @@ export default function Model() {
               {/* if images length = 1 dont show  */}
               {images.length > 1
                 ? images.map((img: string, index: number) => (
-                    <img
+                    <Image
                       key={index}
                       alt="ecommerce"
                       className="w-24 h-24 aspect-square object-cover rounded-xl cursor-pointer"
