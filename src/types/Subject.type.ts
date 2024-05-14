@@ -6,4 +6,5 @@ export interface ISubject {
   linkOfdocs: string[];
   creator: string;
   photo: string;
+  material: string;
 }

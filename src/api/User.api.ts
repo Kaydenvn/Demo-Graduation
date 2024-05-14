@@ -56,3 +56,8 @@ export const updateUser = async (data: IUser) => {
     password: data.password,
   });
 };
+
+export const countUser = async () => {
+  const response = await http.get(`${controller}/count`);
+  return response.data;
+};

@@ -26,6 +26,7 @@ export const addSubject = async (data: ISubject) => {
     linkOfdocs: data.linkOfdocs,
     creator: data.creator,
     photo: data.photo,
+    material: data.material,
   });
   return response.data;
 };
@@ -39,6 +40,7 @@ export const updateSubject = async (data: ISubject) => {
     linkOfdocs: data.linkOfdocs,
     creator: data.creator,
     photo: data.photo,
+    material: data.material,
   });
   return response.data;
 };
@@ -50,5 +52,10 @@ export const deleteSubject = async (id: string) => {
 
 export const getSubjectForThumbnail = async () => {
   const response = await http.get(`${controller}/thumbnail`);
+  return response.data;
+};
+
+export const countSubject = async () => {
+  const response = await http.get(`${controller}/count`);
   return response.data;
 };

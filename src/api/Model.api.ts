@@ -45,3 +45,8 @@ export const getModelForThumbnail = async () => {
   const response = await http.get(`${controller}/thumbnail`);
   return response.data;
 };
+
+export const countModel = async () => {
+  const response = await http.get(`${controller}/count`);
+  return response.data;
+};

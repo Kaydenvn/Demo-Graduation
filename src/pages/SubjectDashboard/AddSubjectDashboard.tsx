@@ -30,6 +30,7 @@ export default function AddSubjectDashboard({
     linkOfdocs: [],
     creator: user?._id || "",
     photo: "",
+    material: "",
   };
   const [form] = useForm();
   const [confirmLoading, setConfirmLoading] = useState(false);
@@ -105,6 +106,8 @@ export default function AddSubjectDashboard({
             },
           });
         } else {
+          console.log(formState);
+
           addSubjectMutation.mutate(formState, {
             onSuccess: () => {
               handleInvalidate();
@@ -159,6 +162,7 @@ export default function AddSubjectDashboard({
             { name: ["linkOfdocs"], value: formState.linkOfdocs },
             { name: ["creator"], value: formState.creator },
             { name: ["photo"], value: formState.photo },
+            { name: ["material"], value: formState.material },
           ]}
         >
           <Form.Item<ISubject>
@@ -228,6 +232,7 @@ export default function AddSubjectDashboard({
               }}
             />
           </Form.Item>
+
           <Form.Item<ISubject>
             label="Ảnh môn học (Link)"
             name="photo"
@@ -236,6 +241,14 @@ export default function AddSubjectDashboard({
             <Input
               onChange={(e) => {
                 setFormState({ ...formState, photo: e.target.value });
+              }}
+            />
+          </Form.Item>
+
+          <Form.Item<ISubject> label="Link file cơ sở vật chất" name="material">
+            <Input
+              onChange={(e) => {
+                setFormState({ ...formState, material: e.target.value });
               }}
             />
           </Form.Item>

@@ -5,6 +5,7 @@ import { useParams } from "react-router-dom";
 import { getSubjectById } from "src/api/Subject.api";
 import Text from "src/components/Text";
 import Loading from "../Loading";
+import DocViewer, { DocViewerRenderers } from "@cyntler/react-doc-viewer";
 
 interface IData {
   nameOfdocs: string;
@@ -28,6 +29,8 @@ export default function Subject() {
       }
     },
   });
+
+  const docs = [{ uri: subjectQueryById.data?.material }];
 
   const columns = [
     {
@@ -83,6 +86,21 @@ export default function Subject() {
             columns={columns}
             dataSource={subjectQueryById.data?.docs}
           />
+
+          {subjectQueryById.data?.material && (
+            <div>
+              <Text size="xl" className="font-bold mt-10 px-5">
+                Cơ sở vật chất
+              </Text>
+
+              <DocViewer
+                documents={docs}
+                pluginRenderers={DocViewerRenderers}
+                style={{ height: 500 }}
+                config={{ header: { disableHeader: true } }}
+              />
+            </div>
+          )}
         </section>
       )}
     </Fragment>
