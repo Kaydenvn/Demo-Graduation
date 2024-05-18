@@ -1,11 +1,8 @@
-import { Link, NavLink } from "react-router-dom";
+import { Link } from "react-router-dom";
 import Logo from "src/assets/logo_FTE_mainpage_2.png";
 import Avatar from "../Avatar";
-import useAuth from "src/hooks/useAuth";
 
 export default function Header() {
-  const { isAuthenticated } = useAuth();
-
   return (
     <header className="navbar bg-primary sticky top-0 z-50 rounded-b">
       <div className="navbar-start">
@@ -112,16 +109,18 @@ export default function Header() {
               Nội quy
             </Link>
           </li>
+          <li>
+            <Link
+              to="/obd"
+              className="text-white btn bg-transparent border-none hover:text-primary"
+            >
+              Mã lỗi OBD-II
+            </Link>
+          </li>
         </ul>
       </div>
       <div className="navbar-end">
-        {isAuthenticated == true ? (
-          <Avatar />
-        ) : (
-          <NavLink to="/login" className="btn">
-            Đăng Nhập
-          </NavLink>
-        )}
+        <Avatar />
       </div>
     </header>
   );

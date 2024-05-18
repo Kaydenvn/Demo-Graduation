@@ -1,10 +1,23 @@
 import { useQuery } from "@tanstack/react-query";
-import { Calendar, Col, Row } from "antd";
+import { Badge, BadgeProps, Calendar, Col, Row } from "antd";
 import { countSubject } from "src/api/Subject.api";
 import TotalCountCard from "src/components/Dashboard/TotalCountCard";
 import Text from "src/components/Text";
 import { countModel } from "./../../api/Model.api";
 import { countUser } from "./../../api/User.api";
+import { Dayjs } from "dayjs";
+
+const getListData = (value: Dayjs) => {
+  let listData;
+  const dateValue = value.format("DD/MM/YYYY");
+  switch (dateValue) {
+    case "30/05/2024":
+      listData = [{ type: "success", content: "Bảo vệ đồ án" }];
+      break;
+    default:
+  }
+  return listData || [];
+};
 
 export default function Dashboard() {
   const countSubjectQuery = useQuery({
@@ -21,6 +34,22 @@ export default function Dashboard() {
     queryKey: ["countUser"],
     queryFn: () => countUser(),
   });
+
+  const dateCellRender = (value: Dayjs) => {
+    const listData = getListData(value);
+    return (
+      <ul className="events">
+        {listData.map((item) => (
+          <li key={item.content}>
+            <Badge
+              status={item.type as BadgeProps["status"]}
+              text={item.content}
+            />
+          </li>
+        ))}
+      </ul>
+    );
+  };
 
   return (
     <div className="p-4 sm:ml-64">
@@ -52,7 +81,7 @@ export default function Dashboard() {
           <Text className="mt-12" size="lg">
             Thời Khoá Biểu:
           </Text>
-          <Calendar />
+          <Calendar cellRender={dateCellRender} />
         </Row>
       </div>
     </div>

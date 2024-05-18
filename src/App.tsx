@@ -20,6 +20,7 @@ const AllModel = React.lazy(() => import("./pages/AllModel"));
 const AllSubject = React.lazy(() => import("./pages/AllSubject"));
 const Rules = React.lazy(() => import("./pages/Rules"));
 const News = React.lazy(() => import("./pages/News"));
+const OBD = React.lazy(() => import("./pages/OBD"));
 
 function App() {
   return (
@@ -38,6 +39,7 @@ function App() {
             <Route path="/introduction" element={<Introduction />} />
             <Route path="/rules" element={<Rules />} />
             <Route path="/news" element={<News />} />
+            <Route path="/obd" element={<OBD />} />
           </Route>
         </Route>
         <Route element={<DashboardLayout />}>
