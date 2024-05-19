@@ -93,14 +93,7 @@ export default function Header() {
               Tin Tức
             </Link>
           </li>
-          <li>
-            <Link
-              to="https://fte.hcmut.edu.vn/chuyen-muc/lich-cong-tac"
-              className="text-white btn bg-transparent border-none hover:text-primary"
-            >
-              Liên Hệ
-            </Link>
-          </li>
+
           <li>
             <Link
               to="/rules"
@@ -115,6 +108,14 @@ export default function Header() {
               className="text-white btn bg-transparent border-none hover:text-primary"
             >
               Mã lỗi OBD-II
+            </Link>
+          </li>
+          <li>
+            <Link
+              to="https://fte.hcmut.edu.vn/chuyen-muc/lich-cong-tac"
+              className="text-white btn bg-transparent border-none hover:text-primary"
+            >
+              Liên Hệ
             </Link>
           </li>
         </ul>

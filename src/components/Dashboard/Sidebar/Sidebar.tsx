@@ -54,6 +54,15 @@ export default function Sidebar() {
               <span className="ms-3">Môn học </span>
             </Link>
           </li>
+          <li>
+            <Link
+              to="/dashboard/subjects"
+              className="flex items-center p-2 text-gray-900 rounded-lg hover:bg-gray-100 group"
+            >
+              <BookOutlined />
+              <span className="ms-3">OBD </span>
+            </Link>
+          </li>
         </ul>
       </div>
     </aside>
