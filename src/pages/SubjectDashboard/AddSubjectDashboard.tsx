@@ -1,14 +1,16 @@
-import { Button, Form, Input, Modal, Skeleton } from "antd";
+import { Button, Form, Input, Modal, Skeleton, Upload } from "antd";
 import { useForm } from "antd/es/form/Form";
 import React, { useEffect, useState } from "react";
 import { OpenType } from "./SubjectDashboard";
 
+import { UploadOutlined } from "@ant-design/icons";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import TextArea from "antd/es/input/TextArea";
 import { addSubject, getSubjectById, updateSubject } from "src/api/Subject.api";
 import { showNotification } from "src/components/Notification/Notification";
 import useAuth from "src/hooks/useAuth";
 import { ISubject } from "src/types/Subject.type";
+import http from "src/utils/http";
 
 interface Props {
   open: OpenType;
@@ -252,6 +254,35 @@ export default function AddSubjectDashboard({
               }}
             />
           </Form.Item>
+          <Upload
+            customRequest={async (options) => {
+              const { file, onSuccess } = options;
+              const formData = new FormData();
+              formData.append("file", file);
+
+              try {
+                const res = await http.post(
+                  "/api/upload/cloudinary-excel",
+                  formData,
+                  {
+                    headers: {
+                      "Content-Type": "multipart/form-data",
+                    },
+                    withCredentials: true,
+                  }
+                );
+                const data = res.data.result;
+                setFormState({ ...formState, material: data.url });
+                if (onSuccess) {
+                  onSuccess("Ok");
+                }
+              } catch (error) {
+                console.log("error", error);
+              }
+            }}
+          >
+            <Button icon={<UploadOutlined />}>Upload</Button>
+          </Upload>
         </Form>
       )}
     </Modal>
