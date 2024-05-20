@@ -192,7 +192,7 @@ export default function AddSubjectDashboard({
           </Form.Item>
 
           <Form.Item<ISubject>
-            label="Tên tài liệu (mỗi tài liệu xuống dòng, thêm dấu phẩy ở cuối)"
+            label="Tên tài liệu (mỗi tài liệu cách nhau bởi dấu phẩy)"
             name="nameOfdocs"
             rules={[{ required: true, message: "Hãy nhập tên tài liệu" }]}
           >
@@ -208,7 +208,7 @@ export default function AddSubjectDashboard({
           </Form.Item>
 
           <Form.Item<ISubject>
-            label="Link tài liệu (mỗi tài liệu xuống dòng, thêm dấu phẩy ở cuối)"
+            label="Link tài liệu (mỗi tài liệu cách nhau bởi dấu phẩy)"
             name="linkOfdocs"
             rules={[{ required: true, message: "Hãy nhập link tài liệu" }]}
           >
@@ -222,6 +222,42 @@ export default function AddSubjectDashboard({
               }}
             />
           </Form.Item>
+          <Upload
+            customRequest={async (options) => {
+              const { file, onSuccess } = options;
+              const formData = new FormData();
+              formData.append("file", file);
+
+              try {
+                const res = await http.post("/api/upload/drive", formData, {
+                  headers: {
+                    "Content-Type": "multipart/form-data",
+                  },
+                  withCredentials: true,
+                });
+                const data = res.data.data;
+                if (formState.linkOfdocs[0]) {
+                  setFormState({
+                    ...formState,
+                    linkOfdocs: [...formState.linkOfdocs, data.webViewLink],
+                  });
+                } else {
+                  setFormState({
+                    ...formState,
+                    linkOfdocs: [data.webViewLink],
+                  });
+                }
+
+                if (onSuccess) {
+                  onSuccess("Ok");
+                }
+              } catch (error) {
+                console.log("error", error);
+              }
+            }}
+          >
+            <Button icon={<UploadOutlined />}>Upload</Button>
+          </Upload>
 
           <Form.Item<ISubject>
             label="Người tạo"

@@ -1,4 +1,4 @@
-import { Button, DatePicker, Form, Input, Modal, Skeleton } from "antd";
+import { Button, DatePicker, Form, Input, Modal, Skeleton, Upload } from "antd";
 import { useForm } from "antd/es/form/Form";
 import React, { useEffect, useState } from "react";
 import { OpenType } from "./ModelDashboard";
@@ -9,6 +9,8 @@ import { addModel, getModelById, updateModel } from "src/api/Model.api";
 import { showNotification } from "src/components/Notification/Notification";
 import { IModel } from "src/types/Model.type";
 import TextArea from "antd/es/input/TextArea";
+import { UploadOutlined } from "@ant-design/icons";
+import http from "src/utils/http";
 
 interface Props {
   open: OpenType;
@@ -259,6 +261,48 @@ export default function AddModelDashboard({
               }}
             />
           </Form.Item>
+          <Upload
+            customRequest={async (options) => {
+              const { file, onSuccess } = options;
+              const formData = new FormData();
+              formData.append("file", file);
+
+              try {
+                const res = await http.post(
+                  "/api/upload/cloudinary",
+                  formData,
+                  {
+                    headers: {
+                      "Content-Type": "multipart/form-data",
+                    },
+                    withCredentials: true,
+                  }
+                );
+                const data = res.data.result;
+                console.log("data", data);
+
+                if (formState.photo[0]) {
+                  setFormState({
+                    ...formState,
+                    photo: [...formState.photo, data.url],
+                  });
+                } else {
+                  setFormState({
+                    ...formState,
+                    photo: [data.url],
+                  });
+                }
+
+                if (onSuccess) {
+                  onSuccess("Ok");
+                }
+              } catch (error) {
+                console.log("error", error);
+              }
+            }}
+          >
+            <Button icon={<UploadOutlined />}>Upload</Button>
+          </Upload>
         </Form>
       )}
     </Modal>
