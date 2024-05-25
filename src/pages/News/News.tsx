@@ -58,7 +58,7 @@ const News: React.FC = () => (
       },
       pageSize: 4,
     }}
-    className="container mt-4"
+    className="container mt-4 mx-auto"
     dataSource={news}
     renderItem={(item) => (
       <List.Item
