@@ -98,6 +98,7 @@ export default function ObdDashboard() {
   const pageSize = 10;
   const [page, setPage] = useState(1);
   const clientQuery = useQueryClient();
+  const [loading, setLoading] = useState(false);
 
   const [open, setOpen] = useState<OpenType>({ isOpen: false });
 
@@ -138,13 +139,14 @@ export default function ObdDashboard() {
   };
 
   const handleFirebase = async () => {
-    const data = await syncObd();
-    if (!data.added) {
-      showNotification("Không có mã lỗi mới", "info");
-    } else {
-      showNotification("Cập nhật thành công", "success");
+    await syncObd();
+    showNotification("Cập nhật thành công", "success");
+    // timeout to wait for firebase to update
+    setLoading(true);
+    setTimeout(() => {
       handleInvalidate();
-    }
+      setLoading(false);
+    }, 3000);
   };
 
   return (
@@ -172,7 +174,7 @@ export default function ObdDashboard() {
             className="mt-4"
             columns={columns(true, true, handleEdit, handleDelete)}
             dataSource={obdQuery.data?.data}
-            loading={obdQuery.isLoading}
+            loading={obdQuery.isLoading || loading}
             pagination={{
               current: page,
               pageSize,
