@@ -38,3 +38,8 @@ export const deleteObd = async (id: string) => {
   const response = await http.delete(`${controller}/${id}`);
   return response.data;
 };
+
+export const syncObd = async () => {
+  const response = await http.get(`/api/firebase`);
+  return response.data;
+};

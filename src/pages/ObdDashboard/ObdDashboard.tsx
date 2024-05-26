@@ -2,7 +2,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Button, Flex, Popconfirm, Skeleton, Space } from "antd";
 import Table, { ColumnsType } from "antd/es/table";
 import { Fragment, useState } from "react";
-import { deleteObd, getAllObds } from "src/api/Obd.api";
+import { deleteObd, getAllObds, syncObd } from "src/api/Obd.api";
 import { showNotification } from "src/components/Notification/Notification";
 import Text from "src/components/Text";
 import { IObd } from "src/types/Obd.type";
@@ -34,6 +34,7 @@ const columns = function (
       render(_: string, record: IObd) {
         return record.status == "Done" ? "Đã xử lý" : "Chưa xử lý";
       },
+      width: "8%",
     },
     {
       title: "Ngày nhận lỗi",
@@ -42,6 +43,7 @@ const columns = function (
       render(_: string, record: IObd) {
         return Dayjs(record.createDate).format("DD/MM/YYYY");
       },
+      width: "8%",
     },
     {
       title: "Ngày xử lý",
@@ -49,7 +51,11 @@ const columns = function (
       key: "doneDate",
       render(_: string, record: IObd) {
         return (
-          <>{record.doneDate ? record.doneDate.toString() : "Chưa xử lý"}</>
+          <>
+            {record.doneDate
+              ? Dayjs(record.doneDate).format("DD/MM/YYYY")
+              : "Chưa xử lý"}
+          </>
         );
       },
     },
@@ -103,6 +109,7 @@ export default function ObdDashboard() {
     },
     onSuccess: () => {
       showNotification("Xoá lỗi thành công", "success");
+      handleInvalidate();
     },
   });
 
@@ -130,19 +137,32 @@ export default function ObdDashboard() {
     });
   };
 
+  const handleFirebase = async () => {
+    const data = await syncObd();
+    if (!data.added) {
+      showNotification("Không có mã lỗi mới", "info");
+    } else {
+      showNotification("Cập nhật thành công", "success");
+      handleInvalidate();
+    }
+  };
+
   return (
     <Fragment>
       <div className="p-4 sm:ml-64">
         <Text size="lg" className="font-bold">
           OBD
         </Text>
-        <Flex className="mt-4">
+        <Flex className="mt-4" gap={20}>
           <Button
             onClick={() => setOpen({ isOpen: true })}
             className="bg-soft"
             type="primary"
           >
             Thêm mã lỗi OBD
+          </Button>
+          <Button className="bg-soft" type="primary" onClick={handleFirebase}>
+            Tự động cập nhật từ mô hình
           </Button>
         </Flex>
         {obdQuery.isLoading ? (

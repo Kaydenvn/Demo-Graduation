@@ -211,11 +211,7 @@ export default function AddObdDashboard({
             />
           </Form.Item>
 
-          <Form.Item<IObd>
-            label="Ngày sửa lỗi"
-            name="doneDate"
-            rules={[{ message: "Hãy nhập ngày bảo dưỡng!" }]}
-          >
+          <Form.Item<IObd> label="Ngày sửa lỗi" name="doneDate">
             <DatePicker
               onChange={(date) => {
                 setFormState({

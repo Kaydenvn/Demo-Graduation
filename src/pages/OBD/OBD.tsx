@@ -1,54 +1,60 @@
+import { useQuery } from "@tanstack/react-query";
 import { Table } from "antd";
-import React, { Fragment } from "react";
+import { ColumnsType } from "antd/es/table";
+import Dayjs from "dayjs";
+import React, { Fragment, useState } from "react";
+import { getAllObds } from "src/api/Obd.api";
 import Text from "src/components/Text";
+import { IObd } from "src/types/Obd.type";
 
-const columns = [
+const columnTitle: ColumnsType<IObd> = [
   {
-    title: "Mã lỗi",
-    dataIndex: "code",
-    key: "code",
-    width: "20%",
+    title: "Tên mã lỗi",
+    dataIndex: "title",
+    key: "title",
   },
   {
     title: "Mô tả",
     dataIndex: "description",
     key: "description",
   },
-];
-
-const data = [
   {
-    key: "1",
-    code: "P0253",
-    description: `Mã lỗi P0253 là mã lỗi cho vấn đề về điều khiển đo lường nhiên liệu bơm tiêm "A" thấp (Cam/Rotor/Injector). Mã lỗi này chỉ xuất hiện trên các động cơ diesel và chỉ được lưu trữ trên PCM (Powertrain Control Module) của xe. Nó có nghĩa là PCM của xe đã phát hiện sự không nhất quán giữa điện áp tín hiệu của bộ điều khiển nhiên liệu điện tử được gửi đi và tín hiệu được trả về bởi bộ điều khiển cảm biến đo lường nhiên liệu.`,
+    title: "Trạng thái",
+    dataIndex: "status",
+    key: "status",
+    render(_: string, record: IObd) {
+      return record.status == "Done" ? "Đã xử lý" : "Chưa xử lý";
+    },
+    width: "8%",
   },
   {
-    key: "2",
-    code: "P2111",
-    description:
-      "Mã lỗi P2112 trên xe diesel có nghĩa là hệ thống điều khiển bộ điều khiển ga không thể mở; đây là một mã lỗi liên quan đến hệ thống ga, cùng với mã lỗi P2111, chỉ ra rằng hệ thống không thể đóng. Hệ thống này liên quan đến động cơ ga, nơi di chuyển bản lề ga để mô-đun điều khiển động cơ (PCM) có thể điều chỉnh lượng không khí vào động cơ, tùy thuộc vào nhu cầu của người dùng.",
+    title: "Ngày nhận lỗi",
+    dataIndex: "createDate",
+    key: "createDate",
+    render(_: string, record: IObd) {
+      return Dayjs(record.createDate).format("DD/MM/YYYY");
+    },
+    width: "8%",
   },
   {
-    key: "3",
-    code: "P0101",
-    description:
-      "Mã lỗi P0101 là một mã sự cố chẩn đoán trong hệ thống ô tô, viết tắt của sự cố cảm biến lưu lượng khí khối (MAF). Khi máy tính trên ô tô phát hiện số đọc không hợp lý hoặc nằm ngoài phạm vi từ cảm biến MAF, nó sẽ ghi lại mã lỗi P0101",
-  },
-  {
-    key: "4",
-    code: "P0473",
-    description:
-      "Mã lỗi P0473 là một mã lỗi chẩn đoán trong hệ thống ô tô, liên quan đến cảm biến áp suất khí xả (Exhaust Pressure Sensor). Khi máy tính trên ô tô phát hiện giá trị áp suất khí xả không hợp lý hoặc nằm ngoài phạm vi từ cảm biến, nó sẽ ghi lại mã lỗi P0473.",
-  },
-  {
-    key: "5",
-    code: "P2113",
-    description:
-      "Mã lỗi P2113 là một mã lỗi chẩn đoán trong hệ thống ô tô, liên quan đến cảm biến điều khiển động cơ (ETC - Electronic Throttle Control). Khi máy tính trên ô tô phát hiện giá trị không hợp lý hoặc nằm ngoài phạm vi từ cảm biến ETC, nó sẽ ghi lại mã lỗi P2113.",
+    title: "Ngày xử lý",
+    dataIndex: "doneDate",
+    key: "doneDate",
+    render(_: string, record: IObd) {
+      return <>{record.doneDate ? record.doneDate.toString() : "Chưa xử lý"}</>;
+    },
+    width: "8%",
   },
 ];
 
 export default function OBD() {
+  const [page, setPage] = useState(1);
+  const pageSize = 10;
+  const obdQuery = useQuery({
+    queryKey: ["obdsTable"],
+    queryFn: () => getAllObds(page, pageSize),
+    staleTime: 60 * 1000,
+  });
   return (
     <Fragment>
       <div className="container px-10 py-6">
@@ -58,7 +64,20 @@ export default function OBD() {
         <p className="mt-2">Tên mô hình Hyundai D4ea Commonrail</p>
       </div>
       <div className="px-6">
-        <Table columns={columns} dataSource={data} />
+        <Table
+          columns={columnTitle}
+          dataSource={obdQuery.data?.data}
+          loading={obdQuery.isLoading}
+          pagination={{
+            current: page,
+            pageSize,
+            total: obdQuery.data?.total_pages,
+            onChange: (page) => {
+              setPage(page);
+            },
+          }}
+          rowKey={(record) => record._id}
+        />
       </div>
     </Fragment>
   );
