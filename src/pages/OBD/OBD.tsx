@@ -41,7 +41,13 @@ const columnTitle: ColumnsType<IObd> = [
     dataIndex: "doneDate",
     key: "doneDate",
     render(_: string, record: IObd) {
-      return <>{record.doneDate ? record.doneDate.toString() : "Chưa xử lý"}</>;
+      return (
+        <>
+          {record.doneDate
+            ? Dayjs(record.doneDate).format("DD/MM/YYYY")
+            : "Chưa xử lý"}
+        </>
+      );
     },
     width: "8%",
   },
