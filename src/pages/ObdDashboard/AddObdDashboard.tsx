@@ -1,16 +1,13 @@
-import { Button, DatePicker, Form, Input, Modal, Skeleton, Upload } from "antd";
+import { Button, DatePicker, Form, Input, Modal, Select, Skeleton } from "antd";
 import { useForm } from "antd/es/form/Form";
 import React, { useEffect, useState } from "react";
 import { OpenType } from "./ObdDashboard";
 
 import { useMutation, useQuery } from "@tanstack/react-query";
 import dayjs from "dayjs";
-import { addModel, getModelById, updateModel } from "src/api/Model.api";
+import { addObd, getObdById, updateObd } from "src/api/Obd.api";
 import { showNotification } from "src/components/Notification/Notification";
-import { IModel } from "src/types/Model.type";
-import TextArea from "antd/es/input/TextArea";
-import { UploadOutlined } from "@ant-design/icons";
-import http from "src/utils/http";
+import { IObd } from "src/types/Obd.type";
 
 interface Props {
   open: OpenType;
@@ -18,17 +15,13 @@ interface Props {
   handleInvalidate: () => void;
 }
 
-const day = dayjs();
-const today = day.format("YYYY-MM-DD");
-
-const initialFormState: IModel = {
+const initialFormState: IObd = {
   _id: "",
   title: "",
   description: "",
-  startDate: today,
-  modelType: "",
-  maintainTime: today,
-  photo: [""],
+  createDate: new Date(),
+  status: "",
+  doneDate: null,
 };
 
 export default function AddObdDashboard({
@@ -37,11 +30,11 @@ export default function AddObdDashboard({
   handleInvalidate,
 }: Props) {
   const [form] = useForm();
-  const [formState, setFormState] = useState<IModel>(initialFormState);
+  const [formState, setFormState] = useState<IObd>(initialFormState);
   const [confirmLoading, setConfirmLoading] = useState(false);
 
   const addModelMutation = useMutation({
-    mutationFn: (data: IModel) => addModel(data),
+    mutationFn: (data: IObd) => addObd(data),
     onMutate: async () => {
       setConfirmLoading(true);
     },
@@ -51,7 +44,7 @@ export default function AddObdDashboard({
       setFormState(initialFormState);
     },
     onSuccess: () => {
-      showNotification("Thêm môn học thành công", "success");
+      showNotification("Thêm lỗi thành công", "success");
       setConfirmLoading(false);
     },
   });
@@ -59,7 +52,7 @@ export default function AddObdDashboard({
   const isEdit = Boolean(open.id);
 
   const updateModelMutation = useMutation({
-    mutationFn: (data: IModel) => updateModel(data),
+    mutationFn: (data: IObd) => updateObd(data),
     onMutate: async () => {
       setConfirmLoading(true);
     },
@@ -69,31 +62,25 @@ export default function AddObdDashboard({
       setFormState(initialFormState);
     },
     onSuccess: () => {
-      showNotification("Cập nhật môn học thành công", "success");
+      showNotification("Cập nhật lỗi thành công", "success");
       setConfirmLoading(false);
     },
   });
 
-  const modelByIdQuery = useQuery({
-    queryKey: ["ModelById", open.id],
+  const obdByIdQuery = useQuery({
+    queryKey: ["ObdById", open.id],
     queryFn: () => {
       if (open.id) {
-        return getModelById(open.id);
+        return getObdById(open.id);
       }
     },
     enabled: !!open.id,
   });
   useEffect(() => {
-    if (modelByIdQuery.isSuccess) {
-      const editUser = {
-        ...modelByIdQuery.data,
-        maintainTime: dayjs(modelByIdQuery.data.maintainTime),
-        startDate: dayjs(modelByIdQuery.data.startDate),
-      };
-
-      setFormState(editUser);
+    if (obdByIdQuery.isSuccess) {
+      setFormState({ ...formState, ...obdByIdQuery.data });
     }
-  }, [modelByIdQuery.data, modelByIdQuery.isSuccess]);
+  }, [obdByIdQuery.data, obdByIdQuery.isSuccess]);
 
   const handleCancelModal = () => {
     setOpen({ isOpen: false });
@@ -155,7 +142,7 @@ export default function AddObdDashboard({
         </Button>,
       ]}
     >
-      {modelByIdQuery.isFetching && isEdit ? (
+      {obdByIdQuery.isFetching && isEdit ? (
         <Skeleton active paragraph={{ rows: 6 }} />
       ) : (
         <Form
@@ -166,19 +153,15 @@ export default function AddObdDashboard({
           fields={[
             { name: ["title"], value: formState.title },
             { name: ["description"], value: formState.description },
-            { name: ["modelType"], value: formState.modelType },
+            { name: ["createDate"], value: dayjs(formState.createDate) },
+            { name: ["status"], value: formState.status },
             {
-              name: ["maintainTime"],
-              value: dayjs(formState.maintainTime),
-            },
-            { name: ["photo"], value: formState.photo },
-            {
-              name: ["startDate"],
-              value: dayjs(formState.startDate),
+              name: ["doneDate"],
+              value: formState.doneDate ? dayjs(formState.doneDate) : null,
             },
           ]}
         >
-          <Form.Item<IModel>
+          <Form.Item<IObd>
             label="Tên mô hình"
             name="title"
             rules={[{ required: true, message: " Hãy nhập tên mô hình!" }]}
@@ -190,7 +173,7 @@ export default function AddObdDashboard({
             />
           </Form.Item>
 
-          <Form.Item<IModel>
+          <Form.Item<IObd>
             label="Mô tả"
             name="description"
             rules={[{ required: true, message: "Hãy nhập mô tả mô hình!" }]}
@@ -202,107 +185,46 @@ export default function AddObdDashboard({
             />
           </Form.Item>
 
-          <Form.Item<IModel>
-            label="Loại mô hình"
-            name="modelType"
+          <Form.Item<IObd>
+            label="Trạng thái"
+            name="status"
             rules={[{ required: true, message: "Hãy nhập loại mô hình!" }]}
           >
-            <Input
-              onChange={(e) => {
-                setFormState({ ...formState, modelType: e.target.value });
+            <Select
+              onChange={(value) => {
+                setFormState({ ...formState, status: value });
+              }}
+            >
+              <Select.Option value="Done">Đã xử lý</Select.Option>
+              <Select.Option value="Pending">Chưa xử lý</Select.Option>
+            </Select>
+          </Form.Item>
+
+          <Form.Item<IObd> label="Ngày nhận lỗi" name="createDate">
+            <DatePicker
+              onChange={(date) => {
+                setFormState({
+                  ...formState,
+                  createDate: date.toDate(),
+                });
               }}
             />
           </Form.Item>
 
-          <Form.Item<IModel>
-            label="Ngày nhập xưởng"
-            name="startDate"
-            rules={[{ required: true, message: "Hãy nhập ngày bảo dưỡng!" }]}
+          <Form.Item<IObd>
+            label="Ngày sửa lỗi"
+            name="doneDate"
+            rules={[{ message: "Hãy nhập ngày bảo dưỡng!" }]}
           >
             <DatePicker
               onChange={(date) => {
                 setFormState({
                   ...formState,
-                  startDate: date.format("YYYY-MM-DD"),
-                });
-                console.log("formState", formState);
-              }}
-            />
-          </Form.Item>
-
-          <Form.Item<IModel>
-            label="Ngày bảo dưỡng"
-            name="maintainTime"
-            rules={[{ required: true, message: "Hãy nhập ngày bảo dưỡng!" }]}
-          >
-            <DatePicker
-              onChange={(date) => {
-                setFormState({
-                  ...formState,
-                  maintainTime: date.format("YYYY-MM-DD"),
+                  doneDate: date.toDate(),
                 });
               }}
             />
           </Form.Item>
-
-          <Form.Item<IModel>
-            label="Ảnh mô hình (Các link cách nhau bởi dấu phẩy (,) )"
-            name="photo"
-            rules={[{ required: true, message: "Please input your username!" }]}
-            style={{}}
-          >
-            <TextArea
-              rows={4}
-              onChange={(e) => {
-                setFormState({
-                  ...formState,
-                  photo: e.target.value.split(","),
-                });
-              }}
-            />
-          </Form.Item>
-          <Upload
-            customRequest={async (options) => {
-              const { file, onSuccess } = options;
-              const formData = new FormData();
-              formData.append("file", file);
-
-              try {
-                const res = await http.post(
-                  "/api/upload/cloudinary",
-                  formData,
-                  {
-                    headers: {
-                      "Content-Type": "multipart/form-data",
-                    },
-                    withCredentials: true,
-                  }
-                );
-                const data = res.data.result;
-                console.log("data", data);
-
-                if (formState.photo[0]) {
-                  setFormState({
-                    ...formState,
-                    photo: [...formState.photo, data.url],
-                  });
-                } else {
-                  setFormState({
-                    ...formState,
-                    photo: [data.url],
-                  });
-                }
-
-                if (onSuccess) {
-                  onSuccess("Ok");
-                }
-              } catch (error) {
-                console.log("error", error);
-              }
-            }}
-          >
-            <Button icon={<UploadOutlined />}>Upload</Button>
-          </Upload>
         </Form>
       )}
     </Modal>

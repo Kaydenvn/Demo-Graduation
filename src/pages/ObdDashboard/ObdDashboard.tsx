@@ -1,12 +1,13 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { Button, Flex, Image, Popconfirm, Skeleton, Space } from "antd";
+import { Button, Flex, Popconfirm, Skeleton, Space } from "antd";
 import Table, { ColumnsType } from "antd/es/table";
 import { Fragment, useState } from "react";
-import { deleteModel, getAllModels } from "src/api/Model.api";
+import { deleteObd, getAllObds } from "src/api/Obd.api";
 import { showNotification } from "src/components/Notification/Notification";
 import Text from "src/components/Text";
-import { IModel } from "src/types/Model.type";
+import { IObd } from "src/types/Obd.type";
 import AddAsset from "./AddObdDashboard";
+import Dayjs from "dayjs";
 
 // user value column of antd table
 const columns = function (
@@ -14,10 +15,10 @@ const columns = function (
   isDelete: boolean,
   callbackEdit: (id: string) => void,
   callbackDelete: (id: string) => void
-): ColumnsType<IModel> {
-  const columnTitle: ColumnsType<IModel> = [
+): ColumnsType<IObd> {
+  const columnTitle: ColumnsType<IObd> = [
     {
-      title: "Tên mô hình",
+      title: "Tên mã lỗi",
       dataIndex: "title",
       key: "title",
     },
@@ -27,43 +28,37 @@ const columns = function (
       key: "description",
     },
     {
-      title: "Loại mô hình",
-      dataIndex: "modelType",
-      key: "modelType",
+      title: "Trạng thái",
+      dataIndex: "status",
+      key: "status",
+      render(_: string, record: IObd) {
+        return record.status == "Done" ? "Đã xử lý" : "Chưa xử lý";
+      },
     },
     {
-      title: "Ngày nhập xưởng",
-      dataIndex: "startDate",
-      key: "startDate",
-      render: (_: string, record: IModel) =>
-        record.startDate && new Date(record.startDate).toLocaleDateString(),
+      title: "Ngày nhận lỗi",
+      dataIndex: "createDate",
+      key: "createDate",
+      render(_: string, record: IObd) {
+        return Dayjs(record.createDate).format("DD/MM/YYYY");
+      },
     },
     {
-      title: "Ngày bảo dưỡng",
-      dataIndex: "maintainTime",
-      key: "maintainTime",
-      render: (_: string, record: IModel) =>
-        record.maintainTime &&
-        new Date(record.maintainTime).toLocaleDateString(),
-    },
-    {
-      title: "Ảnh mô hình",
-      key: "photo",
-      dataIndex: "photo",
-      render: (_: string, record: IModel) => (
-        <Image.PreviewGroup>
-          {record.photo.map((item, index) => (
-            <Image key={index} width={50} src={item} alt="Ảnh mô hình" />
-          ))}
-        </Image.PreviewGroup>
-      ),
+      title: "Ngày xử lý",
+      dataIndex: "doneDate",
+      key: "doneDate",
+      render(_: string, record: IObd) {
+        return (
+          <>{record.doneDate ? record.doneDate.toString() : "Chưa xử lý"}</>
+        );
+      },
     },
     {
       title: "Thao tác",
       key: "action",
       align: "center",
       width: 100,
-      render: (_: string, record: IModel) => (
+      render: (_: string, record: IObd) => (
         <Space size="small">
           {isUpdate && (
             <Button type="link" onClick={() => callbackEdit(record._id)}>
@@ -72,7 +67,7 @@ const columns = function (
           )}
           {isDelete && (
             <Popconfirm
-              title={"Bạn có chắc chắn muốn xoá mô hình này không?"}
+              title={"Bạn có chắc chắn muốn xoá lỗi này không?"}
               okButtonProps={{ className: "bg-soft" }}
               onConfirm={() => callbackDelete(record._id)}
             >
@@ -100,27 +95,27 @@ export default function ObdDashboard() {
 
   const [open, setOpen] = useState<OpenType>({ isOpen: false });
 
-  const deleteUserMutation = useMutation({
-    mutationFn: (id: string) => deleteModel(id),
+  const deleteObdMutation = useMutation({
+    mutationFn: (id: string) => deleteObd(id),
 
     onError: (error) => {
       showNotification(error, "error");
     },
     onSuccess: () => {
-      showNotification("Xoá mô hình thành công", "success");
+      showNotification("Xoá lỗi thành công", "success");
     },
   });
 
-  const modelQuery = useQuery({
-    queryKey: ["modelsTable"],
-    queryFn: () => getAllModels(page, pageSize),
+  const obdQuery = useQuery({
+    queryKey: ["obdsTable"],
+    queryFn: () => getAllObds(page, pageSize),
     staleTime: 60 * 1000,
   });
 
   const handleDelete = (id: string) => {
-    deleteUserMutation.mutate(id, {
+    deleteObdMutation.mutate(id, {
       onSuccess: () => {
-        modelQuery.refetch();
+        obdQuery.refetch();
       },
     });
   };
@@ -131,7 +126,7 @@ export default function ObdDashboard() {
 
   const handleInvalidate = () => {
     clientQuery.invalidateQueries({
-      queryKey: ["modelsTable"],
+      queryKey: ["obdsTable"],
     });
   };
 
@@ -139,7 +134,7 @@ export default function ObdDashboard() {
     <Fragment>
       <div className="p-4 sm:ml-64">
         <Text size="lg" className="font-bold">
-          Mô hình
+          OBD
         </Text>
         <Flex className="mt-4">
           <Button
@@ -147,21 +142,21 @@ export default function ObdDashboard() {
             className="bg-soft"
             type="primary"
           >
-            Thêm mô hình
+            Thêm mã lỗi OBD
           </Button>
         </Flex>
-        {modelQuery.isLoading ? (
+        {obdQuery.isLoading ? (
           <Skeleton active />
         ) : (
           <Table
             className="mt-4"
             columns={columns(true, true, handleEdit, handleDelete)}
-            dataSource={modelQuery.data?.data}
-            loading={modelQuery.isLoading}
+            dataSource={obdQuery.data?.data}
+            loading={obdQuery.isLoading}
             pagination={{
               current: page,
               pageSize,
-              total: modelQuery.data?.total_pages,
+              total: obdQuery.data?.total_pages,
               onChange: (page) => {
                 setPage(page);
               },

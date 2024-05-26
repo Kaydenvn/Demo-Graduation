@@ -21,6 +21,7 @@ const AllSubject = React.lazy(() => import("./pages/AllSubject"));
 const Rules = React.lazy(() => import("./pages/Rules"));
 const News = React.lazy(() => import("./pages/News"));
 const OBD = React.lazy(() => import("./pages/OBD"));
+const ObdDashboard = React.lazy(() => import("./pages/ObdDashboard"));
 
 function App() {
   return (
@@ -48,6 +49,7 @@ function App() {
             <Route path="/dashboard/users" element={<UserDashboard />} />
             <Route path="/dashboard/models" element={<ModelDashboard />} />
             <Route path="/dashboard/subjects" element={<SubjectDashboard />} />
+            <Route path="/dashboard/obds" element={<ObdDashboard />} />
           </Route>
         </Route>
       </Route>
