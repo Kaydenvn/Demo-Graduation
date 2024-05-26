@@ -5,6 +5,7 @@ import { useParams } from "react-router-dom";
 import { getModelById } from "src/api/Model.api";
 import ScrollToTop from "src/utils/ScrollToTop";
 import Loading from "../Loading";
+import Bieudo from "src/assets/bieudo.jpeg";
 
 export default function Model() {
   ScrollToTop();
@@ -115,6 +116,10 @@ export default function Model() {
                 <p className="mt-2">
                   Kết quả: {result != 0 ? result + "%" : ""}
                 </p>
+                <p className="mt-10 font-bold">
+                  Quy luật biến đổi độ tin cậy theo thời gian
+                </p>
+                <Image alt="Bieu do" src={Bieudo}></Image>
               </div>
             </div>
           </div>
