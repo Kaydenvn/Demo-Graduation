@@ -112,7 +112,7 @@ export default function Header() {
           </li>
           <li>
             <Link
-              to="https://fte.hcmut.edu.vn/chuyen-muc/lich-cong-tac"
+              to="/contact"
               className="text-white btn bg-transparent border-none hover:text-primary"
             >
               Liên Hệ
