@@ -209,6 +209,7 @@ export default function AddUserDashboard({
               onChange={(value) => {
                 setFormState({ ...formState, role: value });
               }}
+              defaultValue="user"
             >
               <Select.Option value="admin">Admin</Select.Option>
               <Select.Option value="user">User</Select.Option>
@@ -224,6 +225,7 @@ export default function AddUserDashboard({
               onChange={(value) => {
                 setFormState({ ...formState, status: value });
               }}
+              defaultValue="active"
             >
               <Select.Option value="active">Active</Select.Option>
               <Select.Option value="inactive">Inactive</Select.Option>
