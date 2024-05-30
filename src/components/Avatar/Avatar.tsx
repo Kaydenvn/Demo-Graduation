@@ -45,7 +45,7 @@ export default function Avatar() {
       </summary>
       <ul className="p-2 shadow menu dropdown-content z-[1] bg-base-100 rounded-box w-36">
         <li>
-          <a>Profile</a>
+          <Link to="/profile">Profile</Link>
         </li>
         {role === "admin" && (
           <li>
