@@ -11,7 +11,7 @@ const getListData = (value: Dayjs) => {
   let listData;
   const dateValue = value.format("DD/MM/YYYY");
   switch (dateValue) {
-    case "30/05/2024":
+    case "31/05/2024":
       listData = [{ type: "success", content: "Bảo vệ đồ án" }];
       break;
     default:
