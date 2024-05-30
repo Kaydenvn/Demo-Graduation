@@ -146,7 +146,7 @@ export default function ObdDashboard() {
     setTimeout(() => {
       handleInvalidate();
       setLoading(false);
-    }, 3000);
+    }, 5000);
   };
 
   return (
