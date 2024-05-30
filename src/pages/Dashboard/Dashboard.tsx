@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { Badge, BadgeProps, Calendar, Col, Row } from "antd";
+import { Badge, BadgeProps, Calendar, Col, Row, Spin } from "antd";
 import { countSubject } from "src/api/Subject.api";
 import TotalCountCard from "src/components/Dashboard/TotalCountCard";
 import Text from "src/components/Text";
@@ -56,25 +56,37 @@ export default function Dashboard() {
       <div className="p-4">
         <Row gutter={[32, 32]}>
           <Col xs={24} sm={24} xl={8}>
-            <TotalCountCard
-              resource="companies"
-              isLoading={false}
-              totalCount={countModelQuery?.data}
-            />
+            {countModelQuery.isLoading ? (
+              <Spin />
+            ) : (
+              <TotalCountCard
+                resource="companies"
+                isLoading={false}
+                totalCount={countModelQuery?.data}
+              />
+            )}
           </Col>
           <Col xs={24} sm={24} xl={8}>
-            <TotalCountCard
-              resource="contacts"
-              isLoading={false}
-              totalCount={countSubjectQuery?.data || 0}
-            />
+            {countSubjectQuery.isLoading ? (
+              <Spin />
+            ) : (
+              <TotalCountCard
+                resource="contacts"
+                isLoading={false}
+                totalCount={countSubjectQuery?.data || 0}
+              />
+            )}
           </Col>
           <Col xs={24} sm={24} xl={8}>
-            <TotalCountCard
-              resource="deals"
-              isLoading={false}
-              totalCount={countUserQuery?.data || 0}
-            />
+            {countUserQuery.isLoading ? (
+              <Spin />
+            ) : (
+              <TotalCountCard
+                resource="deals"
+                isLoading={false}
+                totalCount={countUserQuery?.data || 0}
+              />
+            )}
           </Col>
         </Row>
         <Row gutter={[32, 32]}>
