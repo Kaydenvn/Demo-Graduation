@@ -1,11 +1,10 @@
+import DocViewer, { DocViewerRenderers } from "@cyntler/react-doc-viewer";
 import { useQuery } from "@tanstack/react-query";
-import { Table } from "antd";
+import { Spin, Table } from "antd";
 import React, { Fragment } from "react";
 import { useParams } from "react-router-dom";
 import { getSubjectById } from "src/api/Subject.api";
 import Text from "src/components/Text";
-import Loading from "../Loading";
-import DocViewer, { DocViewerRenderers } from "@cyntler/react-doc-viewer";
 
 interface IData {
   nameOfdocs: string;
@@ -58,7 +57,7 @@ export default function Subject() {
   return (
     <Fragment>
       {subjectQueryById.isLoading ? (
-        <Loading />
+        <Spin />
       ) : (
         <section className="text-gray-600 body-font">
           <div className="container px-5 py-10 mx-auto flex flex-col">
