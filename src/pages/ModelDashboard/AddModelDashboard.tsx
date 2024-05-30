@@ -51,7 +51,7 @@ export default function AddModelDashboard({
       setFormState(initialFormState);
     },
     onSuccess: () => {
-      showNotification("Thêm môn học thành công", "success");
+      showNotification("Thêm mô hình thành công", "success");
       setConfirmLoading(false);
     },
   });
@@ -69,7 +69,7 @@ export default function AddModelDashboard({
       setFormState(initialFormState);
     },
     onSuccess: () => {
-      showNotification("Cập nhật môn học thành công", "success");
+      showNotification("Cập nhật mô hình thành công", "success");
       setConfirmLoading(false);
     },
   });

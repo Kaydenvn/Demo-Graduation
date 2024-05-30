@@ -1,7 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Button, Flex, Popconfirm, Skeleton, Space } from "antd";
 import Table, { ColumnsType } from "antd/es/table";
-import { Fragment, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import { deleteSubject, getAllSubjects } from "src/api/Subject.api";
 import { showNotification } from "src/components/Notification/Notification";
 import Text from "src/components/Text";
@@ -98,7 +98,7 @@ export interface OpenType {
 }
 
 export default function SubjectDashboard() {
-  const pageSize = 10;
+  const pageSize = 6;
   const [page, setPage] = useState(1);
   const clientQuery = useQueryClient();
 
@@ -139,6 +139,10 @@ export default function SubjectDashboard() {
     });
   };
 
+  useEffect(() => {
+    subjectsQuery.refetch();
+  }, [page, subjectsQuery]);
+
   return (
     <Fragment>
       <div className="p-4 sm:ml-64">
@@ -166,7 +170,7 @@ export default function SubjectDashboard() {
             pagination={{
               current: page,
               pageSize,
-              total: subjectsQuery.data?.total_pages,
+              total: subjectsQuery.data?.total_pages * pageSize || 0,
               onChange: (page) => {
                 setPage(page);
               },

@@ -1,7 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Button, Flex, Image, Popconfirm, Skeleton, Space } from "antd";
 import Table, { ColumnsType } from "antd/es/table";
-import { Fragment, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import { deleteModel, getAllModels } from "src/api/Model.api";
 import { showNotification } from "src/components/Notification/Notification";
 import Text from "src/components/Text";
@@ -94,7 +94,7 @@ export interface OpenType {
 }
 
 export default function ModelDashboard() {
-  const pageSize = 10;
+  const pageSize = 6;
   const [page, setPage] = useState(1);
   const clientQuery = useQueryClient();
 
@@ -135,6 +135,10 @@ export default function ModelDashboard() {
     });
   };
 
+  useEffect(() => {
+    modelQuery.refetch();
+  }, [page, modelQuery]);
+
   return (
     <Fragment>
       <div className="p-4 sm:ml-64">
@@ -161,7 +165,7 @@ export default function ModelDashboard() {
             pagination={{
               current: page,
               pageSize,
-              total: modelQuery.data?.total_pages,
+              total: modelQuery.data?.total_pages * pageSize || 0,
               onChange: (page) => {
                 setPage(page);
               },
