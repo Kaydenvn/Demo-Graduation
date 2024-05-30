@@ -28,7 +28,6 @@ export default function Subject() {
         return getSubjectById(id);
       }
     },
-    staleTime: 1000,
   });
 
   const docs = [{ uri: subjectQueryById.data?.material }];
@@ -58,7 +57,7 @@ export default function Subject() {
 
   return (
     <Fragment>
-      {subjectQueryById.isLoading ? (
+      {subjectQueryById.isLoading || subjectQueryById.isFetching ? (
         <Loading />
       ) : (
         <section className="text-gray-600 body-font">
