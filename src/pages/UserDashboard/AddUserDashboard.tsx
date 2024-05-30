@@ -7,7 +7,6 @@ import { IUser } from "src/types/User.type";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { addUser, getUserById, updateUser } from "src/api/User.api";
 import { showNotification } from "src/components/Notification/Notification";
-import Password from "antd/es/input/Password";
 
 interface Props {
   open: OpenType;
@@ -23,7 +22,7 @@ const initialFormState: IUser = {
   status: "",
   _id: "",
   avatar: "",
-  password: "",
+  password: "Password123",
 };
 
 export default function AddUserDashboard({
@@ -230,22 +229,6 @@ export default function AddUserDashboard({
               <Select.Option value="inactive">Inactive</Select.Option>
             </Select>
           </Form.Item>
-
-          {!isEdit && (
-            <Form.Item<IUser>
-              label="Password"
-              name="password"
-              rules={[
-                { required: true, message: "Please input your password!" },
-              ]}
-            >
-              <Password
-                onChange={(e) => {
-                  setFormState({ ...formState, password: e.target.value });
-                }}
-              />
-            </Form.Item>
-          )}
         </Form>
       )}
     </Modal>
