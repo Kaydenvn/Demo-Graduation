@@ -27,6 +27,7 @@ export default function Subject() {
         return getSubjectById(id);
       }
     },
+    staleTime: 1000,
   });
 
   const docs = [{ uri: subjectQueryById.data?.material }];
