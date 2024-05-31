@@ -83,7 +83,7 @@ export interface OpenType {
 }
 
 export default function UserDashboard() {
-  const pageSize = 10;
+  const pageSize = 8;
   const [page, setPage] = useState(1);
   const clientQuery = useQueryClient();
 
@@ -150,7 +150,7 @@ export default function UserDashboard() {
             pagination={{
               current: page,
               pageSize,
-              total: userQuery.data?.total_pages,
+              total: userQuery.data?.total_pages * pageSize || 0,
               onChange: (page) => {
                 setPage(page);
               },

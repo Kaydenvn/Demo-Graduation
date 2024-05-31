@@ -18,8 +18,8 @@ const initialFormState: IUser = {
   mssv: "",
   name: "",
   email: "",
-  role: "",
-  status: "",
+  role: "user",
+  status: "active",
   _id: "",
   avatar: "",
   password: "Password123",
@@ -207,13 +207,14 @@ export default function AddUserDashboard({
           >
             <Select
               onChange={(value) => {
-                setFormState({ ...formState, role: value });
+                setFormState({ ...formState, role: value.value });
               }}
-              defaultValue="user"
-            >
-              <Select.Option value="admin">Admin</Select.Option>
-              <Select.Option value="user">User</Select.Option>
-            </Select>
+              defaultValue={{ label: "User", value: "user" }}
+              options={[
+                { label: "User", value: "user" },
+                { label: "Admin", value: "admin" },
+              ]}
+            />
           </Form.Item>
 
           <Form.Item<IUser>
@@ -223,13 +224,14 @@ export default function AddUserDashboard({
           >
             <Select
               onChange={(value) => {
-                setFormState({ ...formState, status: value });
+                setFormState({ ...formState, status: value.value });
               }}
-              defaultValue="active"
-            >
-              <Select.Option value="active">Active</Select.Option>
-              <Select.Option value="inactive">Inactive</Select.Option>
-            </Select>
+              defaultValue={{ label: "Active", value: "active" }}
+              options={[
+                { label: "Active", value: "active" },
+                { label: "Inactive", value: "inactive" },
+              ]}
+            />
           </Form.Item>
         </Form>
       )}
