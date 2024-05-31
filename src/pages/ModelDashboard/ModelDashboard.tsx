@@ -97,6 +97,7 @@ export default function ModelDashboard() {
   const pageSize = 6;
   const [page, setPage] = useState(1);
   const clientQuery = useQueryClient();
+  const [loading, setLoading] = useState(false);
 
   const [open, setOpen] = useState<OpenType>({ isOpen: false });
 
@@ -118,11 +119,13 @@ export default function ModelDashboard() {
   });
 
   const handleDelete = (id: string) => {
+    setLoading(true);
     deleteUserMutation.mutate(id, {
       onSuccess: () => {
         modelQuery.refetch();
       },
     });
+    setLoading(false);
   };
 
   const handleEdit = (id: string) => {
@@ -130,9 +133,11 @@ export default function ModelDashboard() {
   };
 
   const handleInvalidate = () => {
+    setLoading(true);
     clientQuery.invalidateQueries({
       queryKey: ["modelsTable"],
     });
+    setLoading(false);
   };
 
   useEffect(() => {
@@ -154,7 +159,7 @@ export default function ModelDashboard() {
             Thêm mô hình
           </Button>
         </Flex>
-        {modelQuery.isLoading ? (
+        {modelQuery.isLoading || loading || clientQuery.isFetching() ? (
           <Skeleton active />
         ) : (
           <Table
